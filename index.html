@@ -27,7 +27,6 @@
       overflow-x: hidden;
     }
 
-    /* ─── Background pattern ─── */
     body::before {
       content: '';
       position: fixed;
@@ -39,7 +38,6 @@
       z-index: 0;
     }
 
-    /* geometric pattern overlay */
     body::after {
       content: '';
       position: fixed;
@@ -47,6 +45,76 @@
       background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23c9a84c' stroke-width='0.3' opacity='0.15'%3E%3Cpolygon points='30,2 58,16 58,44 30,58 2,44 2,16'/%3E%3Cpolygon points='30,10 50,20 50,40 30,50 10,40 10,20'/%3E%3C/g%3E%3C/svg%3E");
       pointer-events: none;
       z-index: 0;
+    }
+
+    /* ── Language Switcher ── */
+    .lang-wrapper {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 100;
+    }
+
+    .lang-toggle {
+      background: rgba(13,51,38,0.6);
+      border: 1px solid rgba(201,168,76,0.2);
+      color: rgba(245,239,224,0.35);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      backdrop-filter: blur(4px);
+    }
+
+    .lang-toggle:hover {
+      color: var(--gold-light);
+      border-color: rgba(201,168,76,0.5);
+      background: rgba(13,51,38,0.85);
+    }
+
+    .lang-switcher {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-width: 220px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-6px);
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .lang-wrapper.open .lang-switcher {
+      opacity: 1;
+      pointer-events: all;
+      transform: translateY(0);
+    }
+
+    .lang-btn {
+      background: rgba(13,51,38,0.88);
+      border: 1px solid rgba(201,168,76,0.2);
+      color: rgba(245,239,224,0.55);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      cursor: pointer;
+      font-family: 'Tajawal', sans-serif;
+      transition: all 0.2s;
+      backdrop-filter: blur(6px);
+    }
+
+    .lang-btn:hover,
+    .lang-btn.active {
+      background: rgba(201,168,76,0.15);
+      border-color: rgba(201,168,76,0.6);
+      color: var(--gold-light);
     }
 
     .container {
@@ -61,7 +129,6 @@
       gap: 40px;
     }
 
-    /* ─── Header ─── */
     header {
       text-align: center;
       animation: fadeDown 1s ease both;
@@ -110,7 +177,6 @@
       margin: 16px auto 0;
     }
 
-    /* ─── Ayah card ─── */
     .ayah-card {
       background: rgba(255,255,255,0.04);
       border: 1px solid rgba(201,168,76,0.25);
@@ -136,7 +202,6 @@
       letter-spacing: 0.05em;
     }
 
-    /* ─── Features ─── */
     .features {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -160,11 +225,7 @@
       background: rgba(201,168,76,0.07);
     }
 
-    .feature-icon {
-      font-size: 2rem;
-      display: block;
-      margin-bottom: 10px;
-    }
+    .feature-icon { font-size: 2rem; display: block; margin-bottom: 10px; }
 
     .feature-title {
       font-size: 0.95rem;
@@ -179,7 +240,6 @@
       line-height: 1.6;
     }
 
-    /* ─── CTA Button ─── */
     .cta-wrap {
       animation: fadeUp 1s ease 0.7s both;
       text-align: center;
@@ -198,7 +258,7 @@
       font-weight: 700;
       font-family: 'Tajawal', sans-serif;
       border: 2px solid rgba(201,168,76,0.4);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 0 rgba(201,168,76,0.4);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
       transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
       cursor: pointer;
     }
@@ -217,7 +277,6 @@
       color: rgba(245,239,224,0.4);
     }
 
-    /* ─── Footer ─── */
     footer {
       text-align: center;
       font-size: 0.78rem;
@@ -234,7 +293,6 @@
     }
     footer a:hover { opacity: 1; }
 
-    /* ─── Animations ─── */
     @keyframes fadeDown {
       from { opacity: 0; transform: translateY(-24px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -247,74 +305,601 @@
       0%, 100% { transform: scale(1); }
       50%       { transform: scale(1.08); }
     }
+
+    /* LTR override for non-Arabic languages */
+    body.ltr {
+      font-family: 'Tajawal', sans-serif;
+      direction: ltr;
+    }
+    body.ltr .lang-wrapper {
+      left: auto;
+      right: 16px;
+      top: 16px;
+    }
+    body.ltr .lang-switcher {
+      left: auto;
+      right: 0;
+    }
+    /* stats always opposite to lang button */
+    #statsWrapper {
+      position: fixed;
+      bottom: 16px;
+      left: 16px !important;
+      right: auto !important;
+    }
+    body.ltr #statsWrapper {
+      left: auto !important;
+      right: 16px !important;
+    }
   </style>
 </head>
 <body>
-  <div class="container">
 
+  <!-- Language Switcher -->
+  <div class="lang-wrapper" id="langWrapper">
+    <button class="lang-toggle" id="langToggle" title="Language">🌐</button>
+    <div class="lang-switcher" id="langSwitcher"></div>
+  </div>
+
+  <div class="container">
     <header>
       <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</p>
       <span class="icon-mosque">🕌</span>
-      <h1>
+      <h1 id="mainTitle">
         إذاعة القرآن الكريم
-        <span>QURAN RADIO • RADIO MA</span>
+        <span id="subTitle">QURAN RADIO • RADIO MA</span>
       </h1>
       <div class="divider"></div>
     </header>
 
     <div class="ayah-card">
       <p class="ayah-text">إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ</p>
-      <p class="ayah-ref">سورة الإسراء — الآية ٩</p>
+      <p class="ayah-ref" id="ayahRef">سورة الإسراء — الآية ٩</p>
     </div>
 
-    <div class="features">
-      <div class="feature">
-        <span class="feature-icon">🎙️</span>
-        <p class="feature-title">تلاوات القرآن</p>
-        <p class="feature-desc">أصوات مشايخ مشهورين على مدار الساعة</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🌿</span>
-        <p class="feature-title">الأذكار والأدعية</p>
-        <p class="feature-desc">أذكار الصباح والمساء مع تذكيرات تلقائية</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">📖</span>
-        <p class="feature-title">المصحف الشريف</p>
-        <p class="feature-desc">مصحف المدينة المنورة مدمج في الموقع</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">📿</span>
-        <p class="feature-title">عداد التسبيح</p>
-        <p class="feature-desc">عداد تفاعلي مع مؤقت ومنبه</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">📜</span>
-        <p class="feature-title">الحديث الشريف</p>
-        <p class="feature-desc">السنة النبوية وسير الصحابة الكرام</p>
-      </div>
-      <div class="feature">
-        <span class="feature-icon">🌍</span>
-        <p class="feature-title">متعدد اللغات</p>
-        <p class="feature-desc">عربي • English • Español</p>
-      </div>
-    </div>
+    <div class="features" id="featuresGrid"></div>
 
     <div class="cta-wrap">
-      <a href="https://magziko.github.io/Radio/" target="_blank" class="cta-btn">
+      <a href="https://magziko.github.io/Radio/" target="_blank" class="cta-btn" id="ctaBtn">
         <span>📻</span>
-        ابدأ الاستماع الآن
+        <span id="ctaText">ابدأ الاستماع الآن</span>
       </a>
-      <p class="cta-sub">بث مباشر مجاني • 24 ساعة / 7 أيام</p>
+      <p class="cta-sub" id="ctaSub">بث مباشر مجاني • 24 ساعة / 7 أيام</p>
     </div>
 
     <footer>
-      <p>
-        Radio Ma &nbsp;|&nbsp;
+      <p>Radio Ma &nbsp;|&nbsp;
         <a href="https://magziko.github.io/Radio/" target="_blank">magziko.github.io/Radio</a>
       </p>
     </footer>
-
   </div>
+
+  <!-- Stats Button — bottom-right corner, triple-click to reveal -->
+  <div id="statsWrapper" style="
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  ">
+    <!-- Flag counter panel (hidden until 3 clicks) -->
+    <div id="flagContainer" style="
+      display: none;
+      background: rgba(13,51,38,0.95);
+      border: 1px solid rgba(201,168,76,0.3);
+      border-radius: 12px;
+      padding: 12px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      max-width: 320px;
+      animation: fadeUp 0.3s ease;
+    ">
+      <a href="http://s01.flagcounter.com/more/Qgi" target="_blank">
+        <img src="https://s01.flagcounter.com/count2/Qgi/bg_0d3326/txt_f0d080/border_1a5c40/columns_9/maxflags_100/viewers_Visitors/labels_1/pageviews_1/flags_0/percent_0/"
+             alt="Flag Counter" border="0"
+             style="max-width:100%; border-radius:6px; display:block;">
+      </a>
+    </div>
+
+    <!-- Tiny toggle button -->
+    <button id="statsToggle" title="إحصائيات الزوار" style="
+      background: rgba(13,51,38,0.55);
+      border: 1px solid rgba(201,168,76,0.15);
+      color: rgba(245,239,224,0.3);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      backdrop-filter: blur(4px);
+      line-height: 1;
+    ">📊</button>
+  </div>
+
+  <!-- Hidden pixel counter (always fires for counting) -->
+  <img src="https://s01.flagcounter.com/count2/Qgi/bg_FFFFFF/txt_000000/border_CCCCCC/columns_9/maxflags_100/viewers_Visitors/labels_1/pageviews_1/flags_0/percent_0/"
+       style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;top:0;left:0;"
+       alt="" loading="eager" aria-hidden="true">
+
+  <script>
+    // ─────────────────────────────────────────────
+    //  TRANSLATIONS  (7 most spoken world languages)
+    // ─────────────────────────────────────────────
+    const translations = {
+      ar: {
+        name: "العربية", flag: "🇸🇦", dir: "rtl",
+        title: "إذاعة القرآن الكريم",
+        subtitle: "QURAN RADIO • RADIO MA",
+        ayahRef: "سورة الإسراء — الآية ٩",
+        cta: "ابدأ الاستماع الآن",
+        ctaSub: "بث مباشر مجاني • 24 ساعة / 7 أيام",
+        features: [
+          { icon: "🎙️", title: "تلاوات القرآن",    desc: "أصوات مشايخ مشهورين على مدار الساعة" },
+          { icon: "🌿", title: "الأذكار والأدعية",  desc: "أذكار الصباح والمساء مع تذكيرات تلقائية" },
+          { icon: "📖", title: "المصحف الشريف",    desc: "مصحف المدينة المنورة مدمج في الموقع" },
+          { icon: "📿", title: "عداد التسبيح",     desc: "عداد تفاعلي مع مؤقت ومنبه" },
+          { icon: "📜", title: "الحديث الشريف",    desc: "السنة النبوية وسير الصحابة الكرام" },
+          { icon: "🌍", title: "متعدد اللغات",     desc: "عربي • English • Español • Français • ..." },
+        ]
+      },
+      en: {
+        name: "English", flag: "🇬🇧", dir: "ltr",
+        title: "Quran Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surah Al-Isra — Verse 9",
+        cta: "Start Listening Now",
+        ctaSub: "Free Live Stream • 24 Hours / 7 Days",
+        features: [
+          { icon: "🎙️", title: "Quran Recitations",  desc: "Famous reciters broadcasting around the clock" },
+          { icon: "🌿", title: "Adhkar & Duas",       desc: "Morning & evening remembrances with reminders" },
+          { icon: "📖", title: "Holy Quran",          desc: "Madinah Mushaf integrated into the site" },
+          { icon: "📿", title: "Tasbih Counter",      desc: "Interactive counter with timer and alarm" },
+          { icon: "📜", title: "Hadith",              desc: "Prophetic traditions and companions' biographies" },
+          { icon: "🌍", title: "Multilingual",        desc: "Arabic • English • Español • Français • ..." },
+        ]
+      },
+      zh: {
+        name: "中文", flag: "🇨🇳", dir: "ltr",
+        title: "古兰经电台",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "苏拉伊斯拉 — 第9节",
+        cta: "立即收听",
+        ctaSub: "免费直播 • 每天24小时 / 每周7天",
+        features: [
+          { icon: "🎙️", title: "古兰经诵读",    desc: "著名诵读者全天候广播" },
+          { icon: "🌿", title: "祈祷与赞美",    desc: "晨昏记念词与自动提醒" },
+          { icon: "📖", title: "神圣古兰经",    desc: "麦地那版古兰经已集成" },
+          { icon: "📿", title: "念珠计数器",    desc: "带计时器和闹钟的互动计数器" },
+          { icon: "📜", title: "圣训",          desc: "先知传统与圣门弟子传记" },
+          { icon: "🌍", title: "多语言支持",    desc: "阿拉伯语 • 英语 • 西班牙语 • 法语 • ..." },
+        ]
+      },
+      hi: {
+        name: "हिन्दी", flag: "🇮🇳", dir: "ltr",
+        title: "क़ुरआन रेडियो",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "सूरह अल-इसरा — आयत ९",
+        cta: "अभी सुनना शुरू करें",
+        ctaSub: "मुफ़्त लाइव स्ट्रीम • 24 घंटे / 7 दिन",
+        features: [
+          { icon: "🎙️", title: "क़ुरआन पाठ",    desc: "प्रसिद्ध क़ारियों का चौबीसों घंटे प्रसारण" },
+          { icon: "🌿", title: "अज़कार और दुआएं", desc: "सुबह-शाम की दुआएं और स्वचालित अनुस्मारक" },
+          { icon: "📖", title: "पवित्र क़ुरआन",  desc: "मदीना मुसहफ साइट में एकीकृत" },
+          { icon: "📿", title: "तस्बीह काउंटर", desc: "टाइमर और अलार्म के साथ इंटरएक्टिव काउंटर" },
+          { icon: "📜", title: "हदीस",           desc: "नबवी परंपराएं और सहाबा की जीवनियां" },
+          { icon: "🌍", title: "बहुभाषी",        desc: "अरबी • अंग्रेज़ी • स्पेनिश • फ्रेंच • ..." },
+        ]
+      },
+      es: {
+        name: "Español", flag: "🇪🇸", dir: "ltr",
+        title: "Radio del Corán",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Sura Al-Isra — Verso 9",
+        cta: "Comenzar a Escuchar",
+        ctaSub: "Transmisión en vivo gratuita • 24 horas / 7 días",
+        features: [
+          { icon: "🎙️", title: "Recitaciones del Corán", desc: "Famosos recitadores transmitiendo las 24 horas" },
+          { icon: "🌿", title: "Adhkar y Súplicas",       desc: "Recordatorios matutinos y vespertinos automáticos" },
+          { icon: "📖", title: "Corán Sagrado",           desc: "Mushaf de Medina integrado en el sitio" },
+          { icon: "📿", title: "Contador de Tasbih",      desc: "Contador interactivo con temporizador y alarma" },
+          { icon: "📜", title: "Hadith",                  desc: "Tradiciones proféticas y biografías de compañeros" },
+          { icon: "🌍", title: "Multilingüe",             desc: "Árabe • Inglés • Español • Francés • ..." },
+        ]
+      },
+      fr: {
+        name: "Français", flag: "🇫🇷", dir: "ltr",
+        title: "Radio Coran",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Sourate Al-Isra — Verset 9",
+        cta: "Commencer à Écouter",
+        ctaSub: "Diffusion en direct gratuite • 24h / 7 jours",
+        features: [
+          { icon: "🎙️", title: "Récitations du Coran",  desc: "Célèbres récitateurs diffusant 24h/24" },
+          { icon: "🌿", title: "Adhkar et Invocations",  desc: "Rappels du matin et du soir avec notifications" },
+          { icon: "📖", title: "Coran Sacré",            desc: "Mushaf de Médine intégré au site" },
+          { icon: "📿", title: "Compteur Tasbih",        desc: "Compteur interactif avec minuterie et alarme" },
+          { icon: "📜", title: "Hadith",                 desc: "Traditions prophétiques et biographies des compagnons" },
+          { icon: "🌍", title: "Multilingue",            desc: "Arabe • Anglais • Espagnol • Français • ..." },
+        ]
+      },
+      pt: {
+        name: "Português", flag: "🇧🇷", dir: "ltr",
+        title: "Rádio Alcorão",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surata Al-Isra — Versículo 9",
+        cta: "Começar a Ouvir",
+        ctaSub: "Transmissão ao vivo gratuita • 24 horas / 7 dias",
+        features: [
+          { icon: "🎙️", title: "Recitações do Corão",    desc: "Famosos recitadores transmitindo 24 horas" },
+          { icon: "🌿", title: "Adhkar e Súplicas",       desc: "Lembretes matinais e noturnos automáticos" },
+          { icon: "📖", title: "Alcorão Sagrado",         desc: "Mushaf de Medina integrado ao site" },
+          { icon: "📿", title: "Contador Tasbih",         desc: "Contador interativo com cronômetro e alarme" },
+          { icon: "📜", title: "Hadith",                  desc: "Tradições proféticas e biografias dos companheiros" },
+          { icon: "🌍", title: "Multilíngue",             desc: "Árabe • Inglês • Espanhol • Francês • ..." },
+        ]
+      },
+      ru: {
+        name: "Русский", flag: "🇷🇺", dir: "ltr",
+        title: "Радио Корана",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Сура Аль-Исра — Аят 9",
+        cta: "Начать слушать",
+        ctaSub: "Бесплатная трансляция • 24 часа / 7 дней",
+        features: [
+          { icon: "🎙️", title: "Чтение Корана",      desc: "Известные чтецы вещают круглосуточно" },
+          { icon: "🌿", title: "Азкар и Дуа",         desc: "Утренние и вечерние поминания с напоминаниями" },
+          { icon: "📖", title: "Священный Коран",     desc: "Мусхаф Медины интегрирован на сайте" },
+          { icon: "📿", title: "Счётчик Тасбих",      desc: "Интерактивный счётчик с таймером и будильником" },
+          { icon: "📜", title: "Хадис",               desc: "Пророческие предания и биографии сподвижников" },
+          { icon: "🌍", title: "Многоязычный",        desc: "Арабский • Английский • Испанский • Русский • ..." },
+        ]
+      },
+      bn: {
+        name: "বাংলা", flag: "🇧🇩", dir: "ltr",
+        title: "কুরআন রেডিও",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "সূরা আল-ইসরা — আয়াত ৯",
+        cta: "এখনই শুনুন",
+        ctaSub: "বিনামূল্যে লাইভ স্ট্রিম • ২৪ ঘণ্টা / ৭ দিন",
+        features: [
+          { icon: "🎙️", title: "কুরআন তিলাওয়াত",   desc: "বিখ্যাত কারীদের চব্বিশ ঘণ্টা সম্প্রচার" },
+          { icon: "🌿", title: "আযকার ও দোয়া",      desc: "সকাল-সন্ধ্যার যিকর ও স্বয়ংক্রিয় অনুস্মারক" },
+          { icon: "📖", title: "পবিত্র কুরআন",       desc: "মদিনা মুসহাফ সাইটে সংযুক্ত" },
+          { icon: "📿", title: "তাসবিহ কাউন্টার",   desc: "টাইমার ও অ্যালার্মসহ ইন্টারেক্টিভ কাউন্টার" },
+          { icon: "📜", title: "হাদিস",              desc: "নবী-সুন্নাহ ও সাহাবীদের জীবনী" },
+          { icon: "🌍", title: "বহুভাষিক",           desc: "আরবি • ইংরেজি • স্প্যানিশ • বাংলা • ..." },
+        ]
+      },
+      ur: {
+        name: "اردو", flag: "🇵🇰", dir: "rtl",
+        title: "قرآن ریڈیو",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "سورہ الاسراء — آیت ۹",
+        cta: "ابھی سنیں",
+        ctaSub: "مفت لائیو سٹریم • ۲۴ گھنٹے / ۷ دن",
+        features: [
+          { icon: "🎙️", title: "قرآن کی تلاوت",     desc: "مشہور قاریوں کی چوبیس گھنٹے نشریات" },
+          { icon: "🌿", title: "اذکار و دعائیں",     desc: "صبح و شام کے اذکار اور خودکار یاد دہانی" },
+          { icon: "📖", title: "مقدس قرآن",          desc: "مصحف مدینہ سائٹ میں شامل" },
+          { icon: "📿", title: "تسبیح کاؤنٹر",      desc: "ٹائمر اور الارم کے ساتھ انٹرایکٹو کاؤنٹر" },
+          { icon: "📜", title: "حدیث",               desc: "نبوی روایات اور صحابہ کرام کی سیرت" },
+          { icon: "🌍", title: "کثیر اللسانی",       desc: "عربی • انگریزی • اسپینی • اردو • ..." },
+        ]
+      },
+      id: {
+        name: "Indonesia", flag: "🇮🇩", dir: "ltr",
+        title: "Radio Al-Quran",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surah Al-Isra — Ayat 9",
+        cta: "Mulai Mendengarkan",
+        ctaSub: "Siaran langsung gratis • 24 jam / 7 hari",
+        features: [
+          { icon: "🎙️", title: "Tilawah Al-Quran",   desc: "Qari terkenal siaran sepanjang waktu" },
+          { icon: "🌿", title: "Dzikir & Doa",        desc: "Dzikir pagi petang dengan pengingat otomatis" },
+          { icon: "📖", title: "Al-Quran Mulia",      desc: "Mushaf Madinah terintegrasi di situs" },
+          { icon: "📿", title: "Penghitung Tasbih",   desc: "Penghitung interaktif dengan timer dan alarm" },
+          { icon: "📜", title: "Hadits",              desc: "Tradisi Nabi dan biografi para sahabat" },
+          { icon: "🌍", title: "Multibahasa",         desc: "Arab • Inggris • Spanyol • Indonesia • ..." },
+        ]
+      },
+      de: {
+        name: "Deutsch", flag: "🇩🇪", dir: "ltr",
+        title: "Koran Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Sure Al-Isra — Vers 9",
+        cta: "Jetzt zuhören",
+        ctaSub: "Kostenloser Livestream • 24 Stunden / 7 Tage",
+        features: [
+          { icon: "🎙️", title: "Koran-Rezitationen",  desc: "Berühmte Rezitatoren rund um die Uhr" },
+          { icon: "🌿", title: "Adhkar & Duas",         desc: "Morgen- und Abendgebete mit Erinnerungen" },
+          { icon: "📖", title: "Heiliger Koran",        desc: "Medina-Mushaf in die Website integriert" },
+          { icon: "📿", title: "Tasbih-Zähler",        desc: "Interaktiver Zähler mit Timer und Alarm" },
+          { icon: "📜", title: "Hadith",                desc: "Prophetische Überlieferungen und Gefährten-Biografien" },
+          { icon: "🌍", title: "Mehrsprachig",          desc: "Arabisch • Englisch • Spanisch • Deutsch • ..." },
+        ]
+      },
+      ja: {
+        name: "日本語", flag: "🇯🇵", dir: "ltr",
+        title: "クルアーンラジオ",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "スーラ・アル＝イスラー — 第9節",
+        cta: "今すぐ聴く",
+        ctaSub: "無料ライブ配信 • 24時間 / 7日間",
+        features: [
+          { icon: "🎙️", title: "クルアーン朗誦",    desc: "著名な朗誦者が24時間放送" },
+          { icon: "🌿", title: "ズィクルと祈り",    desc: "朝夕のズィクルと自動リマインダー" },
+          { icon: "📖", title: "聖クルアーン",      desc: "マディーナ版クルアーンをサイトに統合" },
+          { icon: "📿", title: "タスビーフカウンター", desc: "タイマーとアラーム付きインタラクティブカウンター" },
+          { icon: "📜", title: "ハディース",        desc: "預言者の伝承とサハーバの伝記" },
+          { icon: "🌍", title: "多言語対応",        desc: "アラビア語 • 英語 • スペイン語 • 日本語 • ..." },
+        ]
+      },
+      ko: {
+        name: "한국어", flag: "🇰🇷", dir: "ltr",
+        title: "꾸란 라디오",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "수라 알-이스라 — 9절",
+        cta: "지금 듣기",
+        ctaSub: "무료 라이브 스트리밍 • 24시간 / 7일",
+        features: [
+          { icon: "🎙️", title: "꾸란 낭송",       desc: "유명 낭송자들의 24시간 방송" },
+          { icon: "🌿", title: "지크르와 두아",    desc: "아침저녁 지크르와 자동 알림" },
+          { icon: "📖", title: "성 꾸란",          desc: "마디나 무스하프 사이트 통합" },
+          { icon: "📿", title: "타스비흐 카운터", desc: "타이머와 알람이 있는 인터랙티브 카운터" },
+          { icon: "📜", title: "하디스",           desc: "예언자 전통과 사하바 전기" },
+          { icon: "🌍", title: "다국어 지원",      desc: "아랍어 • 영어 • 스페인어 • 한국어 • ..." },
+        ]
+      },
+      tr: {
+        name: "Türkçe", flag: "🇹🇷", dir: "ltr",
+        title: "Kuran Radyosu",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "İsra Suresi — 9. Ayet",
+        cta: "Dinlemeye Başla",
+        ctaSub: "Ücretsiz canlı yayın • 24 saat / 7 gün",
+        features: [
+          { icon: "🎙️", title: "Kuran Tilaveti",     desc: "Ünlü hafızlardan 7/24 yayın" },
+          { icon: "🌿", title: "Zikir ve Dualar",     desc: "Sabah-akşam zikirleri ve otomatik hatırlatıcı" },
+          { icon: "📖", title: "Kutsal Kuran",        desc: "Medine Mushafı siteye entegre edildi" },
+          { icon: "📿", title: "Tesbih Sayacı",       desc: "Zamanlayıcı ve alarmla interaktif sayaç" },
+          { icon: "📜", title: "Hadis",               desc: "Nebevi gelenekler ve sahabe biyografileri" },
+          { icon: "🌍", title: "Çok Dilli",           desc: "Arapça • İngilizce • İspanyolca • Türkçe • ..." },
+        ]
+      },
+      vi: {
+        name: "Tiếng Việt", flag: "🇻🇳", dir: "ltr",
+        title: "Đài Phát Thanh Quran",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surah Al-Isra — Câu 9",
+        cta: "Bắt Đầu Nghe",
+        ctaSub: "Phát sóng trực tiếp miễn phí • 24 giờ / 7 ngày",
+        features: [
+          { icon: "🎙️", title: "Đọc Kinh Quran",    desc: "Các reciter nổi tiếng phát sóng 24/7" },
+          { icon: "🌿", title: "Adhkar & Dua",        desc: "Kinh cầu buổi sáng và tối với nhắc nhở tự động" },
+          { icon: "📖", title: "Kinh Quran",          desc: "Mushaf Madinah tích hợp vào trang web" },
+          { icon: "📿", title: "Đếm Tasbih",         desc: "Bộ đếm tương tác với hẹn giờ và báo thức" },
+          { icon: "📜", title: "Hadith",              desc: "Truyền thống Thiên sứ và tiểu sử các Sahabah" },
+          { icon: "🌍", title: "Đa Ngôn Ngữ",        desc: "Ả Rập • Anh • Tây Ban Nha • Việt Nam • ..." },
+        ]
+      },
+      th: {
+        name: "ภาษาไทย", flag: "🇹🇭", dir: "ltr",
+        title: "วิทยุอัลกุรอาน",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "ซูเราะฮฺ อัล-อิสรา — อายะฮฺ 9",
+        cta: "เริ่มฟังเลย",
+        ctaSub: "สตรีมสดฟรี • 24 ชั่วโมง / 7 วัน",
+        features: [
+          { icon: "🎙️", title: "การอ่านอัลกุรอาน",  desc: "ผู้อ่านชื่อดังออกอากาศตลอด 24 ชั่วโมง" },
+          { icon: "🌿", title: "อัซการ์และดุอา",     desc: "การรำลึกเช้า-เย็นพร้อมแจ้งเตือนอัตโนมัติ" },
+          { icon: "📖", title: "อัลกุรอานอันศักดิ์สิทธิ์", desc: "มุสฮัฟมะดีนะฮฺรวมอยู่ในเว็บไซต์" },
+          { icon: "📿", title: "นับลูกประคำตัสบีห์", desc: "เครื่องนับแบบโต้ตอบพร้อมตั้งเวลาและนาฬิกาปลุก" },
+          { icon: "📜", title: "หะดีษ",             desc: "ประเพณีของศาสดาและชีวประวัติของสหาย" },
+          { icon: "🌍", title: "หลายภาษา",          desc: "อาหรับ • อังกฤษ • สเปน • ไทย • ..." },
+        ]
+      },
+      fa: {
+        name: "فارسی", flag: "🇮🇷", dir: "rtl",
+        title: "رادیو قرآن",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "سوره الاسراء — آیه ۹",
+        cta: "همین حالا گوش دهید",
+        ctaSub: "پخش زنده رایگان • ۲۴ ساعت / ۷ روز",
+        features: [
+          { icon: "🎙️", title: "تلاوت قرآن",        desc: "قاریان مشهور به صورت شبانه‌روزی پخش می‌کنند" },
+          { icon: "🌿", title: "اذکار و دعاها",      desc: "اذکار صبح و شام با یادآوری خودکار" },
+          { icon: "📖", title: "قرآن مجید",          desc: "مصحف مدینه در سایت ادغام شده است" },
+          { icon: "📿", title: "شمارنده تسبیح",      desc: "شمارنده تعاملی با تایمر و زنگ هشدار" },
+          { icon: "📜", title: "حدیث",               desc: "سنت نبوی و زندگینامه صحابه کرام" },
+          { icon: "🌍", title: "چند زبانه",          desc: "عربی • انگلیسی • اسپانیایی • فارسی • ..." },
+        ]
+      },
+      pl: {
+        name: "Polski", flag: "🇵🇱", dir: "ltr",
+        title: "Radio Koranu",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Sura Al-Isra — Werset 9",
+        cta: "Zacznij Słuchać",
+        ctaSub: "Bezpłatna transmisja na żywo • 24 godziny / 7 dni",
+        features: [
+          { icon: "🎙️", title: "Recytacje Koranu",   desc: "Słynni recytatorzy nadają przez całą dobę" },
+          { icon: "🌿", title: "Adhkar i Dua",        desc: "Poranne i wieczorne wspomnienia z przypomnieniami" },
+          { icon: "📖", title: "Święty Koran",        desc: "Mushaf Medyny zintegrowany ze stroną" },
+          { icon: "📿", title: "Licznik Tasbih",      desc: "Interaktywny licznik z timerem i alarmem" },
+          { icon: "📜", title: "Hadith",              desc: "Tradycje prorockie i biografie towarzyszy" },
+          { icon: "🌍", title: "Wielojęzyczny",       desc: "Arabski • Angielski • Hiszpański • Polski • ..." },
+        ]
+      },
+      ha: {
+        name: "Hausa", flag: "🇳🇬", dir: "ltr",
+        title: "Rediyon Alƙur'ani",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Suratul Isra'i — Aya ta 9",
+        cta: "Fara Sauraro Yanzu",
+        ctaSub: "Watsa shirye-shirye kyauta • Awanni 24 / Kwanaki 7",
+        features: [
+          { icon: "🎙️", title: "Karatun Alƙur'ani",  desc: "Mashahuran masu karatu suna watsa shirye-shirye" },
+          { icon: "🌿", title: "Azkar da Addu'o'i",   desc: "Azkar na safe da yamma tare da tunatarwa" },
+          { icon: "📖", title: "Alƙur'anin Mai Tsarki", desc: "Mushafin Madina ya haɗe a cikin shafin" },
+          { icon: "📿", title: "Ma'aunin Tasbih",     desc: "Ma'aunin hulɗa tare da agogo da faɗakarwa" },
+          { icon: "📜", title: "Hadisi",              desc: "Al'adun Annabi da tarihin Sahabbai" },
+          { icon: "🌍", title: "Harsuna da yawa",     desc: "Larabci • Turanci • Sipaniyanci • Hausa • ..." },
+        ]
+      },
+      am: {
+        name: "አማርኛ", flag: "🇪🇹", dir: "ltr",
+        title: "የቁርዓን ሬዲዮ",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "ሱረቱል ኢስራእ — አያ 9",
+        cta: "አሁን ማዳመጥ ጀምሩ",
+        ctaSub: "ነፃ ቀጥታ ስርጭት • 24 ሰዓት / 7 ቀናት",
+        features: [
+          { icon: "🎙️", title: "የቁርዓን ንባብ",       desc: "ታዋቂ ቃሪዎች ቀን ከሌት ያሰራጫሉ" },
+          { icon: "🌿", title: "አዝካር እና ዱዓ",       desc: "የጠዋትና የምሽት ዝክሮች ከራስ-ሰር ማሳሰቢያ ጋር" },
+          { icon: "📖", title: "ቅዱስ ቁርዓን",         desc: "የመዲና ሙስሃፍ በጣቢያው ውስጥ ተቀናጅቷል" },
+          { icon: "📿", title: "የተስቢህ ቆጣሪ",       desc: "ከሰዓት ቆጣሪ እና ማንቂያ ጋር መስተጋብራዊ ቆጣሪ" },
+          { icon: "📜", title: "ሃዲስ",              desc: "የነብያዊ ወጎች እና የሰሃቦች የሕይወት ታሪኮች" },
+          { icon: "🌍", title: "ብዙ ቋንቋ",           desc: "አረብኛ • እንግሊዝኛ • ስፓኒሽ • አማርኛ • ..." },
+        ]
+      }
+    };
+
+    // ─────────────────────────────────────────────
+    //  DETECT BROWSER LANGUAGE
+    // ─────────────────────────────────────────────
+    function detectLang() {
+      const nav = (navigator.language || navigator.userLanguage || 'ar').toLowerCase().split('-')[0];
+      const map = { ar:'ar', en:'en', zh:'zh', hi:'hi', es:'es', fr:'fr', pt:'pt', ru:'ru', bn:'bn', ur:'ur', id:'id', de:'de', ja:'ja', ko:'ko', tr:'tr', vi:'vi', th:'th', fa:'fa', pl:'pl', ha:'ha', am:'am' };
+      return map[nav] || 'ar';
+    }
+
+    // ─────────────────────────────────────────────
+    //  APPLY LANGUAGE
+    // ─────────────────────────────────────────────
+    function applyLang(code) {
+      const t = translations[code];
+      if (!t) return;
+
+      // Direction & font
+      document.documentElement.lang = code;
+      document.documentElement.dir = t.dir;
+      if (t.dir === 'ltr') {
+        document.body.classList.add('ltr');
+      } else {
+        document.body.classList.remove('ltr');
+      }
+
+      // Text content
+      document.getElementById('mainTitle').childNodes[0].textContent = t.title + '\n';
+      document.getElementById('subTitle').textContent = t.subtitle;
+      document.getElementById('ayahRef').textContent = t.ayahRef;
+      document.getElementById('ctaText').textContent = t.cta;
+      document.getElementById('ctaSub').textContent = t.ctaSub;
+      document.title = t.title + ' | Radio Ma';
+
+      // Features grid
+      const grid = document.getElementById('featuresGrid');
+      grid.innerHTML = t.features.map(f => `
+        <div class="feature">
+          <span class="feature-icon">${f.icon}</span>
+          <p class="feature-title">${f.title}</p>
+          <p class="feature-desc">${f.desc}</p>
+        </div>
+      `).join('');
+
+      // Active button
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === code);
+      });
+
+      // Save preference
+      localStorage.setItem('preferredLang', code);
+    }
+
+    // ─────────────────────────────────────────────
+    //  BUILD LANG SWITCHER
+    // ─────────────────────────────────────────────
+    function buildSwitcher() {
+      const switcher = document.getElementById('langSwitcher');
+      Object.entries(translations).forEach(([code, t]) => {
+        const btn = document.createElement('button');
+        btn.className = 'lang-btn';
+        btn.dataset.lang = code;
+        btn.textContent = t.flag + ' ' + t.name;
+        btn.onclick = () => applyLang(code);
+        switcher.appendChild(btn);
+      });
+    }
+
+    // ─────────────────────────────────────────────
+    //  INIT
+    // ─────────────────────────────────────────────
+    buildSwitcher();
+    const saved = localStorage.getItem('preferredLang');
+    applyLang(saved && translations[saved] ? saved : detectLang());
+
+    // Toggle open/close
+    const wrapper = document.getElementById('langWrapper');
+    document.getElementById('langToggle').addEventListener('click', (e) => {
+      e.stopPropagation();
+      wrapper.classList.toggle('open');
+    });
+    document.addEventListener('click', () => wrapper.classList.remove('open'));
+
+    // ─────────────────────────────────────────────
+    //  STATS — triple-click to reveal
+    // ─────────────────────────────────────────────
+    let clickCount = 0, clickTimer = null;
+    const statsBtn = document.getElementById('statsToggle');
+    const flagBox  = document.getElementById('flagContainer');
+
+    statsBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      clickCount++;
+      clearTimeout(clickTimer);
+
+      // highlight button slightly on each click
+      statsBtn.style.color = 'rgba(240,208,128,0.6)';
+      statsBtn.style.borderColor = 'rgba(201,168,76,0.4)';
+
+      if (clickCount >= 3) {
+        clickCount = 0;
+        const isOpen = flagBox.style.display !== 'none';
+        flagBox.style.display = isOpen ? 'none' : 'block';
+        // full glow when open
+        statsBtn.style.color = isOpen ? 'rgba(245,239,224,0.3)' : 'rgba(240,208,128,0.9)';
+        statsBtn.style.borderColor = isOpen ? 'rgba(201,168,76,0.15)' : 'rgba(201,168,76,0.7)';
+        statsBtn.style.background = isOpen ? 'rgba(13,51,38,0.55)' : 'rgba(201,168,76,0.15)';
+      } else {
+        // reset dim after 1.2s if not 3 clicks
+        clickTimer = setTimeout(() => {
+          clickCount = 0;
+          if (flagBox.style.display === 'none') {
+            statsBtn.style.color = 'rgba(245,239,224,0.3)';
+            statsBtn.style.borderColor = 'rgba(201,168,76,0.15)';
+            statsBtn.style.background = 'rgba(13,51,38,0.55)';
+          }
+        }, 1200);
+      }
+    });
+
+    // close stats panel when clicking outside
+    document.addEventListener('click', () => {
+      if (flagBox.style.display !== 'none') {
+        flagBox.style.display = 'none';
+        statsBtn.style.color = 'rgba(245,239,224,0.3)';
+        statsBtn.style.borderColor = 'rgba(201,168,76,0.15)';
+        statsBtn.style.background = 'rgba(13,51,38,0.55)';
+      }
+    });
+    document.getElementById('statsWrapper').addEventListener('click', e => e.stopPropagation());
+  </script>
 </body>
 </html>
