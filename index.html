@@ -82,13 +82,33 @@
       top: 44px;
       left: 0;
       display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      max-width: 220px;
+      flex-direction: column;
+      gap: 0;
+      width: 272px;
+      max-height: calc(100vh - 80px);
+      overflow-y: auto;
+      padding: 10px 10px 12px;
+      background: rgba(13,51,38,0.25);
+      border: 1px solid rgba(201,168,76,0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      scrollbar-width: thin;
+      scrollbar-color: rgba(201,168,76,0.3) transparent;
       opacity: 0;
       pointer-events: none;
       transform: translateY(-6px);
       transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .lang-switcher::-webkit-scrollbar { width: 4px; }
+    .lang-switcher::-webkit-scrollbar-track { background: transparent; }
+    .lang-switcher::-webkit-scrollbar-thumb {
+      background: rgba(201,168,76,0.3);
+      border-radius: 2px;
+    }
+    .lang-switcher::-webkit-scrollbar-thumb:hover {
+      background: rgba(201,168,76,0.6);
     }
 
     .lang-wrapper.open .lang-switcher {
@@ -97,17 +117,55 @@
       transform: translateY(0);
     }
 
+    /* Grid rows inside switcher */
+    .lang-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin-bottom: 5px;
+    }
+    .lang-row.top10 {
+      /* top 10 rows use same grid */
+    }
+
+    /* Divider label between sections */
+    .lang-region {
+      grid-column: 1 / -1;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(201,168,76,0.55);
+      padding: 8px 4px 4px;
+      border-top: 1px solid rgba(201,168,76,0.12);
+      margin-top: 4px;
+      width: 100%;
+    }
+    .lang-region:first-child {
+      border-top: none;
+      padding-top: 2px;
+      margin-top: 0;
+    }
+
+    /* Thin divider after top-10 */
+    .lang-divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,0.35), transparent);
+      margin: 6px 0 4px;
+    }
+
     .lang-btn {
-      background: rgba(13,51,38,0.88);
-      border: 1px solid rgba(201,168,76,0.2);
-      color: rgba(245,239,224,0.55);
+      background: rgba(13,51,38,0.3);
+      border: 1px solid rgba(201,168,76,0.15);
+      color: rgba(245,239,224,0.7);
       padding: 4px 10px;
       border-radius: 20px;
       font-size: 0.72rem;
       cursor: pointer;
       font-family: 'Tajawal', sans-serif;
       transition: all 0.2s;
-      backdrop-filter: blur(6px);
+      backdrop-filter: blur(2px);
     }
 
     .lang-btn:hover,
@@ -115,6 +173,12 @@
       background: rgba(201,168,76,0.15);
       border-color: rgba(201,168,76,0.6);
       color: var(--gold-light);
+    }
+
+    /* Top-10 buttons slightly highlighted */
+    .lang-btn.top {
+      border-color: rgba(201,168,76,0.28);
+      color: rgba(245,239,224,0.85);
     }
 
     .container {
@@ -433,6 +497,7 @@
     //  TRANSLATIONS  (7 most spoken world languages)
     // ─────────────────────────────────────────────
     const translations = {
+
       ar: {
         name: "العربية", flag: "🇸🇦", dir: "rtl",
         title: "إذاعة القرآن الكريم",
@@ -465,116 +530,20 @@
           { icon: "🌍", title: "Multilingual",        desc: "Arabic • English • Español • Français • ..." },
         ]
       },
-      zh: {
-        name: "中文", flag: "🇨🇳", dir: "ltr",
-        title: "古兰经电台",
+      id: {
+        name: "Indonesia", flag: "🇮🇩", dir: "ltr",
+        title: "Radio Al-Quran",
         subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "苏拉伊斯拉 — 第9节",
-        cta: "立即收听",
-        ctaSub: "免费直播 • 每天24小时 / 每周7天",
+        ayahRef: "Surah Al-Isra — Ayat 9",
+        cta: "Mulai Mendengarkan",
+        ctaSub: "Siaran langsung gratis • 24 jam / 7 hari",
         features: [
-          { icon: "🎙️", title: "古兰经诵读",    desc: "著名诵读者全天候广播" },
-          { icon: "🌿", title: "祈祷与赞美",    desc: "晨昏记念词与自动提醒" },
-          { icon: "📖", title: "神圣古兰经",    desc: "麦地那版古兰经已集成" },
-          { icon: "📿", title: "念珠计数器",    desc: "带计时器和闹钟的互动计数器" },
-          { icon: "📜", title: "圣训",          desc: "先知传统与圣门弟子传记" },
-          { icon: "🌍", title: "多语言支持",    desc: "阿拉伯语 • 英语 • 西班牙语 • 法语 • ..." },
-        ]
-      },
-      hi: {
-        name: "हिन्दी", flag: "🇮🇳", dir: "ltr",
-        title: "क़ुरआन रेडियो",
-        subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "सूरह अल-इसरा — आयत ९",
-        cta: "अभी सुनना शुरू करें",
-        ctaSub: "मुफ़्त लाइव स्ट्रीम • 24 घंटे / 7 दिन",
-        features: [
-          { icon: "🎙️", title: "क़ुरआन पाठ",    desc: "प्रसिद्ध क़ारियों का चौबीसों घंटे प्रसारण" },
-          { icon: "🌿", title: "अज़कार और दुआएं", desc: "सुबह-शाम की दुआएं और स्वचालित अनुस्मारक" },
-          { icon: "📖", title: "पवित्र क़ुरआन",  desc: "मदीना मुसहफ साइट में एकीकृत" },
-          { icon: "📿", title: "तस्बीह काउंटर", desc: "टाइमर और अलार्म के साथ इंटरएक्टिव काउंटर" },
-          { icon: "📜", title: "हदीस",           desc: "नबवी परंपराएं और सहाबा की जीवनियां" },
-          { icon: "🌍", title: "बहुभाषी",        desc: "अरबी • अंग्रेज़ी • स्पेनिश • फ्रेंच • ..." },
-        ]
-      },
-      es: {
-        name: "Español", flag: "🇪🇸", dir: "ltr",
-        title: "Radio del Corán",
-        subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "Sura Al-Isra — Verso 9",
-        cta: "Comenzar a Escuchar",
-        ctaSub: "Transmisión en vivo gratuita • 24 horas / 7 días",
-        features: [
-          { icon: "🎙️", title: "Recitaciones del Corán", desc: "Famosos recitadores transmitiendo las 24 horas" },
-          { icon: "🌿", title: "Adhkar y Súplicas",       desc: "Recordatorios matutinos y vespertinos automáticos" },
-          { icon: "📖", title: "Corán Sagrado",           desc: "Mushaf de Medina integrado en el sitio" },
-          { icon: "📿", title: "Contador de Tasbih",      desc: "Contador interactivo con temporizador y alarma" },
-          { icon: "📜", title: "Hadith",                  desc: "Tradiciones proféticas y biografías de compañeros" },
-          { icon: "🌍", title: "Multilingüe",             desc: "Árabe • Inglés • Español • Francés • ..." },
-        ]
-      },
-      fr: {
-        name: "Français", flag: "🇫🇷", dir: "ltr",
-        title: "Radio Coran",
-        subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "Sourate Al-Isra — Verset 9",
-        cta: "Commencer à Écouter",
-        ctaSub: "Diffusion en direct gratuite • 24h / 7 jours",
-        features: [
-          { icon: "🎙️", title: "Récitations du Coran",  desc: "Célèbres récitateurs diffusant 24h/24" },
-          { icon: "🌿", title: "Adhkar et Invocations",  desc: "Rappels du matin et du soir avec notifications" },
-          { icon: "📖", title: "Coran Sacré",            desc: "Mushaf de Médine intégré au site" },
-          { icon: "📿", title: "Compteur Tasbih",        desc: "Compteur interactif avec minuterie et alarme" },
-          { icon: "📜", title: "Hadith",                 desc: "Traditions prophétiques et biographies des compagnons" },
-          { icon: "🌍", title: "Multilingue",            desc: "Arabe • Anglais • Espagnol • Français • ..." },
-        ]
-      },
-      pt: {
-        name: "Português", flag: "🇧🇷", dir: "ltr",
-        title: "Rádio Alcorão",
-        subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "Surata Al-Isra — Versículo 9",
-        cta: "Começar a Ouvir",
-        ctaSub: "Transmissão ao vivo gratuita • 24 horas / 7 dias",
-        features: [
-          { icon: "🎙️", title: "Recitações do Corão",    desc: "Famosos recitadores transmitindo 24 horas" },
-          { icon: "🌿", title: "Adhkar e Súplicas",       desc: "Lembretes matinais e noturnos automáticos" },
-          { icon: "📖", title: "Alcorão Sagrado",         desc: "Mushaf de Medina integrado ao site" },
-          { icon: "📿", title: "Contador Tasbih",         desc: "Contador interativo com cronômetro e alarme" },
-          { icon: "📜", title: "Hadith",                  desc: "Tradições proféticas e biografias dos companheiros" },
-          { icon: "🌍", title: "Multilíngue",             desc: "Árabe • Inglês • Espanhol • Francês • ..." },
-        ]
-      },
-      ru: {
-        name: "Русский", flag: "🇷🇺", dir: "ltr",
-        title: "Радио Корана",
-        subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "Сура Аль-Исра — Аят 9",
-        cta: "Начать слушать",
-        ctaSub: "Бесплатная трансляция • 24 часа / 7 дней",
-        features: [
-          { icon: "🎙️", title: "Чтение Корана",      desc: "Известные чтецы вещают круглосуточно" },
-          { icon: "🌿", title: "Азкар и Дуа",         desc: "Утренние и вечерние поминания с напоминаниями" },
-          { icon: "📖", title: "Священный Коран",     desc: "Мусхаф Медины интегрирован на сайте" },
-          { icon: "📿", title: "Счётчик Тасбих",      desc: "Интерактивный счётчик с таймером и будильником" },
-          { icon: "📜", title: "Хадис",               desc: "Пророческие предания и биографии сподвижников" },
-          { icon: "🌍", title: "Многоязычный",        desc: "Арабский • Английский • Испанский • Русский • ..." },
-        ]
-      },
-      bn: {
-        name: "বাংলা", flag: "🇧🇩", dir: "ltr",
-        title: "কুরআন রেডিও",
-        subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "সূরা আল-ইসরা — আয়াত ৯",
-        cta: "এখনই শুনুন",
-        ctaSub: "বিনামূল্যে লাইভ স্ট্রিম • ২৪ ঘণ্টা / ৭ দিন",
-        features: [
-          { icon: "🎙️", title: "কুরআন তিলাওয়াত",   desc: "বিখ্যাত কারীদের চব্বিশ ঘণ্টা সম্প্রচার" },
-          { icon: "🌿", title: "আযকার ও দোয়া",      desc: "সকাল-সন্ধ্যার যিকর ও স্বয়ংক্রিয় অনুস্মারক" },
-          { icon: "📖", title: "পবিত্র কুরআন",       desc: "মদিনা মুসহাফ সাইটে সংযুক্ত" },
-          { icon: "📿", title: "তাসবিহ কাউন্টার",   desc: "টাইমার ও অ্যালার্মসহ ইন্টারেক্টিভ কাউন্টার" },
-          { icon: "📜", title: "হাদিস",              desc: "নবী-সুন্নাহ ও সাহাবীদের জীবনী" },
-          { icon: "🌍", title: "বহুভাষিক",           desc: "আরবি • ইংরেজি • স্প্যানিশ • বাংলা • ..." },
+          { icon: "🎙️", title: "Tilawah Al-Quran",   desc: "Qari terkenal siaran sepanjang waktu" },
+          { icon: "🌿", title: "Dzikir & Doa",        desc: "Dzikir pagi petang dengan pengingat otomatis" },
+          { icon: "📖", title: "Al-Quran Mulia",      desc: "Mushaf Madinah terintegrasi di situs" },
+          { icon: "📿", title: "Penghitung Tasbih",   desc: "Penghitung interaktif dengan timer dan alarm" },
+          { icon: "📜", title: "Hadits",              desc: "Tradisi Nabi dan biografi para sahabat" },
+          { icon: "🌍", title: "Multibahasa",         desc: "Arab • Inggris • Spanyol • Indonesia • ..." },
         ]
       },
       ur: {
@@ -593,20 +562,404 @@
           { icon: "🌍", title: "کثیر اللسانی",       desc: "عربی • انگریزی • اسپینی • اردو • ..." },
         ]
       },
-      id: {
-        name: "Indonesia", flag: "🇮🇩", dir: "ltr",
+      bn: {
+        name: "বাংলা", flag: "🇧🇩", dir: "ltr",
+        title: "কুরআন রেডিও",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "সূরা আল-ইসরা — আয়াত ৯",
+        cta: "এখনই শুনুন",
+        ctaSub: "বিনামূল্যে লাইভ স্ট্রিম • ২৪ ঘণ্টা / ৭ দিন",
+        features: [
+          { icon: "🎙️", title: "কুরআন তিলাওয়াত",   desc: "বিখ্যাত কারীদের চব্বিশ ঘণ্টা সম্প্রচার" },
+          { icon: "🌿", title: "আযকার ও দোয়া",      desc: "সকাল-সন্ধ্যার যিকর ও স্বয়ংক্রিয় অনুস্মারক" },
+          { icon: "📖", title: "পবিত্র কুরআন",       desc: "মদিনা মুসহাফ সাইটে সংযুক্ত" },
+          { icon: "📿", title: "তাসবিহ কাউন্টার",   desc: "টাইমার ও অ্যালার্মসহ ইন্টারেক্টিভ কাউন্টার" },
+          { icon: "📜", title: "হাদিস",              desc: "নবী-সুন্নাহ ও সাহাবীদের জীবনী" },
+          { icon: "🌍", title: "বহুভাষিক",           desc: "আরবি • ইংরেজি • স্প্যানিশ • বাংলা • ..." },
+        ]
+      },
+      hi: {
+        name: "हिन्दी", flag: "🇮🇳", dir: "ltr",
+        title: "क़ुरआन रेडियो",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "सूरह अल-इसरा — आयत ९",
+        cta: "अभी सुनना शुरू करें",
+        ctaSub: "मुफ़्त लाइव स्ट्रीम • 24 घंटे / 7 दिन",
+        features: [
+          { icon: "🎙️", title: "क़ुरआन पाठ",    desc: "प्रसिद्ध क़ारियों का चौबीसों घंटे प्रसारण" },
+          { icon: "🌿", title: "अज़कार और दुआएं", desc: "सुबह-शाम की दुआएं और स्वचालित अनुस्मारक" },
+          { icon: "📖", title: "पवित्र क़ुरआन",  desc: "मदीना मुसहफ साइट में एकीकृत" },
+          { icon: "📿", title: "तस्बीह काउंटर", desc: "टाइमर और अलार्म के साथ इंटरएक्टिव काउंटर" },
+          { icon: "📜", title: "हदीस",           desc: "नबवी परंपराएं और सहाबा की जीवनियां" },
+          { icon: "🌍", title: "बहुभाषी",        desc: "अरबी • अंग्रेज़ी • स्पेनिश • फ्रेंच • ..." },
+        ]
+      },
+      pa: {
+        name: "ਪੰਜਾਬੀ", flag: "🇵🇰", dir: "ltr",
+        title: "ਕੁਰਆਨ ਰੇਡੀਓ",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "ਸੂਰਾ ਅਲ-ਇਸਰਾ — ਆਇਤ 9",
+        cta: "ਹੁਣੇ ਸੁਣਨਾ ਸ਼ੁਰੂ ਕਰੋ",
+        ctaSub: "ਮੁਫ਼ਤ ਲਾਈਵ ਸਟ੍ਰੀਮ • 24 ਘੰਟੇ / 7 ਦਿਨ",
+        features: [
+          { icon: "🎙️", title: "ਕੁਰਆਨ ਤਿਲਾਵਤ",    desc: "ਮਸ਼ਹੂਰ ਕਾਰੀਆਂ ਦਾ ਚੌਵੀ ਘੰਟੇ ਪ੍ਰਸਾਰਣ" },
+          { icon: "🌿", title: "ਅਜ਼ਕਾਰ ਅਤੇ ਦੁਆਵਾਂ", desc: "ਸਵੇਰੇ ਅਤੇ ਸ਼ਾਮ ਦੀਆਂ ਦੁਆਵਾਂ ਨਾਲ ਯਾਦ ਦਿਵਾਉਣੀਆਂ" },
+          { icon: "📖", title: "ਪਵਿੱਤਰ ਕੁਰਆਨ",    desc: "ਮਦੀਨਾ ਮੁਸਹਫ਼ ਸਾਈਟ ਵਿੱਚ ਸ਼ਾਮਲ" },
+          { icon: "📿", title: "ਤਸਬੀਹ ਕਾਊਂਟਰ",   desc: "ਟਾਈਮਰ ਅਤੇ ਅਲਾਰਮ ਨਾਲ ਇੰਟਰੈਕਟਿਵ ਕਾਊਂਟਰ" },
+          { icon: "📜", title: "ਹਦੀਸ",             desc: "ਨਬਵੀ ਰਿਵਾਇਤਾਂ ਅਤੇ ਸਹਾਬਾ ਦੀਆਂ ਜੀਵਨੀਆਂ" },
+          { icon: "🌍", title: "ਬਹੁਭਾਸ਼ਾਈ",        desc: "ਅਰਬੀ • ਅੰਗਰੇਜ਼ੀ • ਉਰਦੂ • ਪੰਜਾਬੀ • ..." },
+        ]
+      },
+      ha: {
+        name: "Hausa", flag: "🇳🇬", dir: "ltr",
+        title: "Rediyon Alƙur'ani",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Suratul Isra'i — Aya ta 9",
+        cta: "Fara Sauraro Yanzu",
+        ctaSub: "Watsa shirye-shirye kyauta • Awanni 24 / Kwanaki 7",
+        features: [
+          { icon: "🎙️", title: "Karatun Alƙur'ani",  desc: "Mashahuran masu karatu suna watsa shirye-shirye" },
+          { icon: "🌿", title: "Azkar da Addu'o'i",   desc: "Azkar na safe da yamma tare da tunatarwa" },
+          { icon: "📖", title: "Alƙur'anin Mai Tsarki", desc: "Mushafin Madina ya haɗe a cikin shafin" },
+          { icon: "📿", title: "Ma'aunin Tasbih",     desc: "Ma'aunin hulɗa tare da agogo da faɗakarwa" },
+          { icon: "📜", title: "Hadisi",              desc: "Al'adun Annabi da tarihin Sahabbai" },
+          { icon: "🌍", title: "Harsuna da yawa",     desc: "Larabci • Turanci • Sipaniyanci • Hausa • ..." },
+        ]
+      },
+      fr: {
+        name: "Français", flag: "🇫🇷", dir: "ltr",
+        title: "Radio Coran",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Sourate Al-Isra — Verset 9",
+        cta: "Commencer à Écouter",
+        ctaSub: "Diffusion en direct gratuite • 24h / 7 jours",
+        features: [
+          { icon: "🎙️", title: "Récitations du Coran",  desc: "Célèbres récitateurs diffusant 24h/24" },
+          { icon: "🌿", title: "Adhkar et Invocations",  desc: "Rappels du matin et du soir avec notifications" },
+          { icon: "📖", title: "Coran Sacré",            desc: "Mushaf de Médine intégré au site" },
+          { icon: "📿", title: "Compteur Tasbih",        desc: "Compteur interactif avec minuterie et alarme" },
+          { icon: "📜", title: "Hadith",                 desc: "Traditions prophétiques et biographies des compagnons" },
+          { icon: "🌍", title: "Multilingue",            desc: "Arabe • Anglais • Espagnol • Français • ..." },
+        ]
+      },
+      tr: {
+        name: "Türkçe", flag: "🇹🇷", dir: "ltr",
+        title: "Kuran Radyosu",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "İsra Suresi — 9. Ayet",
+        cta: "Dinlemeye Başla",
+        ctaSub: "Ücretsiz canlı yayın • 24 saat / 7 gün",
+        features: [
+          { icon: "🎙️", title: "Kuran Tilaveti",     desc: "Ünlü hafızlardan 7/24 yayın" },
+          { icon: "🌿", title: "Zikir ve Dualar",     desc: "Sabah-akşam zikirleri ve otomatik hatırlatıcı" },
+          { icon: "📖", title: "Kutsal Kuran",        desc: "Medine Mushafı siteye entegre edildi" },
+          { icon: "📿", title: "Tesbih Sayacı",       desc: "Zamanlayıcı ve alarmla interaktif sayaç" },
+          { icon: "📜", title: "Hadis",               desc: "Nebevi gelenekler ve sahabe biyografileri" },
+          { icon: "🌍", title: "Çok Dilli",           desc: "Arapça • İngilizce • İspanyolca • Türkçe • ..." },
+        ]
+      },
+      fa: {
+        name: "فارسی", flag: "🇮🇷", dir: "rtl",
+        title: "رادیو قرآن",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "سوره الاسراء — آیه ۹",
+        cta: "همین حالا گوش دهید",
+        ctaSub: "پخش زنده رایگان • ۲۴ ساعت / ۷ روز",
+        features: [
+          { icon: "🎙️", title: "تلاوت قرآن",        desc: "قاریان مشهور به صورت شبانه‌روزی پخش می‌کنند" },
+          { icon: "🌿", title: "اذکار و دعاها",      desc: "اذکار صبح و شام با یادآوری خودکار" },
+          { icon: "📖", title: "قرآن مجید",          desc: "مصحف مدینه در سایت ادغام شده است" },
+          { icon: "📿", title: "شمارنده تسبیح",      desc: "شمارنده تعاملی با تایمر و زنگ هشدار" },
+          { icon: "📜", title: "حدیث",               desc: "سنت نبوی و زندگینامه صحابه کرام" },
+          { icon: "🌍", title: "چند زبانه",          desc: "عربی • انگلیسی • اسپانیایی • فارسی • ..." },
+        ]
+      },
+      ps: {
+        name: "پښتو", flag: "🇦🇫", dir: "rtl",
+        title: "د قرآن راډیو",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "د الاسراء سورت — آیت ۹",
+        cta: "اوس واورئ",
+        ctaSub: "وړیا ژوندی خپرول • ۲۴ ساعته / ۷ ورځې",
+        features: [
+          { icon: "🎙️", title: "د قرآن تلاوت",      desc: "مشهور قاریان ۲۴ ساعته خپروي" },
+          { icon: "🌿", title: "اذکار او دعاګانې",   desc: "د سهار او ماښام اذکار او اتوماتیک یادونه" },
+          { icon: "📖", title: "مقدس قرآن",           desc: "د مدینې مصحف پاڼه کې یوځای شوی" },
+          { icon: "📿", title: "د تسبیح شمیرنه",     desc: "د ټایمر او الارم سره تعاملي شمیرنه" },
+          { icon: "📜", title: "حدیث",                desc: "نبوي روایتونه او د صحابه ژوند لیکونه" },
+          { icon: "🌍", title: "ډیرژبي",              desc: "عربي • انګریزي • اردو • پښتو • ..." },
+        ]
+      },
+      sd: {
+        name: "سنڌي", flag: "🇵🇰", dir: "rtl",
+        title: "قرآن ريڊيو",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "سورة الاسراء — آيت ٩",
+        cta: "هاڻي ٻڌو",
+        ctaSub: "مفت لائيو اسٽريم • 24 ڪلاڪ / 7 ڏينهن",
+        features: [
+          { icon: "🎙️", title: "قرآن جي تلاوت",     desc: "مشهور قارين چوويهن ڪلاڪ نشر ڪن ٿا" },
+          { icon: "🌿", title: "اذڪار ۽ دعائون",     desc: "صبح ۽ شام جا اذڪار ۽ خودڪار ياددهاني" },
+          { icon: "📖", title: "مقدس قرآن",           desc: "مدينه مصحف سائيٽ ۾ شامل ڪيو ويو آهي" },
+          { icon: "📿", title: "تسبيح ڪائونٽر",      desc: "ٽائيمر ۽ الارم سان انٽرايڪٽو ڪائونٽر" },
+          { icon: "📜", title: "حديث",                desc: "نبوي روايتون ۽ صحابه ڪرام جون سوانح" },
+          { icon: "🌍", title: "گهڻن ٻولين ۾",       desc: "عربي • انگريزي • اردو • سنڌي • ..." },
+        ]
+      },
+      ms: {
+        name: "Melayu", flag: "🇲🇾", dir: "ltr",
         title: "Radio Al-Quran",
         subtitle: "إذاعة القرآن الكريم • RADIO MA",
         ayahRef: "Surah Al-Isra — Ayat 9",
-        cta: "Mulai Mendengarkan",
-        ctaSub: "Siaran langsung gratis • 24 jam / 7 hari",
+        cta: "Mula Mendengar Sekarang",
+        ctaSub: "Siaran langsung percuma • 24 jam / 7 hari",
         features: [
-          { icon: "🎙️", title: "Tilawah Al-Quran",   desc: "Qari terkenal siaran sepanjang waktu" },
-          { icon: "🌿", title: "Dzikir & Doa",        desc: "Dzikir pagi petang dengan pengingat otomatis" },
-          { icon: "📖", title: "Al-Quran Mulia",      desc: "Mushaf Madinah terintegrasi di situs" },
-          { icon: "📿", title: "Penghitung Tasbih",   desc: "Penghitung interaktif dengan timer dan alarm" },
-          { icon: "📜", title: "Hadits",              desc: "Tradisi Nabi dan biografi para sahabat" },
-          { icon: "🌍", title: "Multibahasa",         desc: "Arab • Inggris • Spanyol • Indonesia • ..." },
+          { icon: "🎙️", title: "Bacaan Al-Quran",    desc: "Qari terkenal menyiar sepanjang masa" },
+          { icon: "🌿", title: "Zikir & Doa",         desc: "Zikir pagi dan petang dengan peringatan automatik" },
+          { icon: "📖", title: "Al-Quran Mulia",      desc: "Mushaf Madinah disepadukan dalam laman web" },
+          { icon: "📿", title: "Pembilang Tasbih",    desc: "Pembilang interaktif dengan pemasa dan penggera" },
+          { icon: "📜", title: "Hadith",              desc: "Tradisi Nabi dan biografi para Sahabat" },
+          { icon: "🌍", title: "Pelbagai Bahasa",     desc: "Arab • Inggeris • Sepanyol • Melayu • ..." },
+        ]
+      },
+      sw: {
+        name: "Kiswahili", flag: "🇰🇪", dir: "ltr",
+        title: "Redio ya Qurani",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surah Al-Isra — Aya 9",
+        cta: "Anza Kusikiliza Sasa",
+        ctaSub: "Matangazo ya moja kwa moja bure • Masaa 24 / Siku 7",
+        features: [
+          { icon: "🎙️", title: "Usomaji wa Qurani",   desc: "Wasomaji mashuhuri wanaotangaza saa 24" },
+          { icon: "🌿", title: "Adhkari na Dua",       desc: "Dhikri za asubuhi na jioni na vikumbusha" },
+          { icon: "📖", title: "Qurani Tukufu",        desc: "Mushaf wa Madina umejumuishwa kwenye tovuti" },
+          { icon: "📿", title: "Kihesabu cha Tasbih",  desc: "Kihesabu cha mwingiliano na kipima muda na kengele" },
+          { icon: "📜", title: "Hadithi",              desc: "Mafundisho ya Mtume na wasifu wa Masahaba" },
+          { icon: "🌍", title: "Lugha Nyingi",         desc: "Kiarabu • Kiingereza • Kihispania • Kiswahili • ..." },
+        ]
+      },
+      uz: {
+        name: "O'zbek", flag: "🇺🇿", dir: "ltr",
+        title: "Qur'on Radiosi",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Isro surasi — 9-oyat",
+        cta: "Eshitishni Boshlash",
+        ctaSub: "Bepul jonli efir • 24 soat / 7 kun",
+        features: [
+          { icon: "🎙️", title: "Qur'on Tilovati",      desc: "Mashhur qorilar sutkasiga efir beradi" },
+          { icon: "🌿", title: "Zikr va Duolar",        desc: "Ertalab va kechki zikirlar va eslatmalar" },
+          { icon: "📖", title: "Muqaddas Qur'on",       desc: "Madina mushafi saytga integratsiya qilingan" },
+          { icon: "📿", title: "Tasbeh Hisoblagich",    desc: "Taymer va signal bilan interaktiv hisoblagich" },
+          { icon: "📜", title: "Hadis",                 desc: "Payg'ambar an'analari va sahobalar tarjimai holi" },
+          { icon: "🌍", title: "Ko'p tilli",            desc: "Arab • Ingliz • Rus • O'zbek • ..." },
+        ]
+      },
+      yo: {
+        name: "Yorùbá", flag: "🇳🇬", dir: "ltr",
+        title: "Rédíò Al-Kuráánì",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Suuratu Al-Isra — Aaya 9",
+        cta: "Bẹrẹ Gbigbọ Bayi",
+        ctaSub: "Ìtànsí alààyè ọfẹ • Wákàtí 24 / Ọjọ 7",
+        features: [
+          { icon: "🎙️", title: "Kíkàwé Al-Kuráánì",  desc: "Àwọn olùkàwé olókìkí tí wọ́n ń gbé sókè lójú àárọ̀" },
+          { icon: "🌿", title: "Àdúrà àti Dhikr",     desc: "Àwọn ìrántí òwúrọ̀ àti ìrọlẹ pẹ̀lú ìránlọwọ" },
+          { icon: "📖", title: "Al-Kuráánì Mímọ́",    desc: "Mushaf Madina ti dapọ̀ mọ́ ojú-ìwé náà" },
+          { icon: "📿", title: "Ìlọ Tasbih",          desc: "Ìlọ ìbáṣepọ̀ pẹ̀lú aago àti ìdáhún" },
+          { icon: "📜", title: "Hadith",               desc: "Àṣà Annabí àti ìtàn àwọn Ọ̀gbẹni" },
+          { icon: "🌍", title: "Èdè Ọ̀pọ̀lọpọ̀",     desc: "Lárúbáwá • Gẹ̀ẹ́sì • Sípáníìsì • Yorùbá • ..." },
+        ]
+      },
+      so: {
+        name: "Soomaali", flag: "🇸🇴", dir: "ltr",
+        title: "Raadiyaha Quraanka",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Suurat Al-Isra — Aayad 9",
+        cta: "Bilow Dhagaystaha",
+        ctaSub: "Baahinta tooska ah ee bilaashka ah • 24 saac / 7 maalin",
+        features: [
+          { icon: "🎙️", title: "Akhriska Quraanka",   desc: "Akhristayaasha caanka ah oo baahiya 24 saac" },
+          { icon: "🌿", title: "Adhkaar iyo Ducada",   desc: "Xuskii subaxda iyo habeenkii oo xasuusin toos ah" },
+          { icon: "📖", title: "Quraanka Kariimka",    desc: "Mushafka Madiina oo ku dhisan websaydka" },
+          { icon: "📿", title: "Tirinta Tasbiixda",    desc: "Tiriye waxqabad leh oo leh saacad iyo digniinta" },
+          { icon: "📜", title: "Xadiis",               desc: "Dhaqamada Nabiga iyo taariikhdii Saaxiibada" },
+          { icon: "🌍", title: "Luqadaha badan",       desc: "Carabi • Ingiriisi • Soomaali • ..." },
+        ]
+      },
+      kk: {
+        name: "Қазақша", flag: "🇰🇿", dir: "ltr",
+        title: "Құран Радиосы",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Исра сүресі — 9-аят",
+        cta: "Тыңдауды Бастау",
+        ctaSub: "Тегін тікелей эфир • 24 сағат / 7 күн",
+        features: [
+          { icon: "🎙️", title: "Құран Тілауаты",      desc: "Атақты қариялар тәулік бойы хабар таратады" },
+          { icon: "🌿", title: "Зікір және Дұға",      desc: "Таңертең және кешкі зікірлер еске салғыштармен" },
+          { icon: "📖", title: "Қасиетті Құран",       desc: "Мәдина мусхафы сайтқа кірістірілген" },
+          { icon: "📿", title: "Тәсбих Санауышы",      desc: "Таймер мен дабылмен интерактивті санауыш" },
+          { icon: "📜", title: "Хадис",                desc: "Пайғамбар дәстүрлері мен сахабалардың өмірбаяны" },
+          { icon: "🌍", title: "Көптілді",             desc: "Арабша • Ағылшынша • Орысша • Қазақша • ..." },
+        ]
+      },
+      az: {
+        name: "Azərbaycan", flag: "🇦🇿", dir: "ltr",
+        title: "Quran Radiosu",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "İsra surəsi — 9-cu ayə",
+        cta: "Dinləməyə Başla",
+        ctaSub: "Pulsuz canlı yayım • 24 saat / 7 gün",
+        features: [
+          { icon: "🎙️", title: "Quran Tilavəti",       desc: "Məşhur qarilərin gecə-gündüz yayımı" },
+          { icon: "🌿", title: "Zikr və Dualar",        desc: "Səhər və axşam zikirləri avtomatik xatırlatmalarla" },
+          { icon: "📖", title: "Müqəddəs Quran",        desc: "Mədinə mushafı sayta inteqrasiya edilib" },
+          { icon: "📿", title: "Təsbeh Sayğacı",        desc: "Taymer və zəng siqnalı ilə interaktiv sayğac" },
+          { icon: "📜", title: "Hədis",                 desc: "Peyğəmbər ənənələri və səhabələrin tərcümeyi-halı" },
+          { icon: "🌍", title: "Çoxdilli",              desc: "Ərəb • İngilis • Türk • Azərbaycan • ..." },
+        ]
+      },
+      tg: {
+        name: "Тоҷикӣ", flag: "🇹🇯", dir: "ltr",
+        title: "Радиои Қуръон",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Сураи Исро — Ояти 9",
+        cta: "Гӯш Кардан Оғоз Кунед",
+        ctaSub: "Пахши зинда ройгон • 24 соат / 7 рӯз",
+        features: [
+          { icon: "🎙️", title: "Тиловати Қуръон",      desc: "Қориёни машҳур шабонарӯз пахш мекунанд" },
+          { icon: "🌿", title: "Зикр ва Дуо",           desc: "Зикрҳои субҳ ва шом бо хотиррасонии худкор" },
+          { icon: "📖", title: "Қуръони Муқаддас",      desc: "Мусҳафи Мадина дар сайт муттаҳид карда шудааст" },
+          { icon: "📿", title: "Ҳисобкунаки Тасбеҳ",   desc: "Ҳисобкунаки интерактивӣ бо таймер ва зангӯла" },
+          { icon: "📜", title: "Ҳадис",                 desc: "Суннати набавӣ ва тарҷумаи ҳоли саҳобагон" },
+          { icon: "🌍", title: "Бисёрзабона",           desc: "Арабӣ • Англисӣ • Русӣ • Тоҷикӣ • ..." },
+        ]
+      },
+      ug: {
+        name: "ئۇيغۇرچە", flag: "🇨🇳", dir: "rtl",
+        title: "قۇرئان راديئوسى",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "ئىسرا سۈرىسى — 9-ئايەت",
+        cta: "ھازىر ئاڭلاڭ",
+        ctaSub: "ھەقسىز يىرىق ئەسەر • 24 سائەت / 7 كۈن",
+        features: [
+          { icon: "🎙️", title: "قۇرئان تىلاۋەتى",    desc: "داڭلىق قارىلار كېچە-كۈندۈز نەشر قىلىدۇ" },
+          { icon: "🌿", title: "زىكىر ۋە دۇئالار",    desc: "ئەتىگەن ۋە كەچكى زىكىرلەر ئاپتوماتىك ئەسكەرتىش" },
+          { icon: "📖", title: "مۇقەددەس قۇرئان",      desc: "مەدىنە مۇسھىپى تور بېتكە بىرلەشتۈرۈلگەن" },
+          { icon: "📿", title: "تەسبىھ سانىغۇچى",     desc: "ۋاقىت بەلگىلىگۈچ ۋە سىگنال بىلەن ئىنتىراكتىپ سانىغۇچ" },
+          { icon: "📜", title: "ھەدىس",               desc: "پەيغەمبەر سۈننىتى ۋە سەھابىلەرنىڭ تەرجىمىھالى" },
+          { icon: "🌍", title: "كۆپ تىللىق",          desc: "ئەرەبچە • ئىنگلىزچە • خەنزۇچە • ئۇيغۇرچە • ..." },
+        ]
+      },
+      ku: {
+        name: "Kurdî", flag: "🇮🇶", dir: "rtl",
+        title: "Radyoya Quranê",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Sûreta El-İsra — Ayet 9",
+        cta: "Naha Guhdariyê Bike",
+        ctaSub: "Weşana zindî ya belaş • 24 saet / 7 roj",
+        features: [
+          { icon: "🎙️", title: "Tilaweta Quranê",     desc: "Xwendekarên navdar 24 saetan weşan dikin" },
+          { icon: "🌿", title: "Zikr û Dua",           desc: "Zikrên sibê û êvarê bi bîranînên otomatîk" },
+          { icon: "📖", title: "Qurana Pîroz",         desc: "Mushefa Medinê di malpêrê de hatiye entegre kirin" },
+          { icon: "📿", title: "Jimêra Tesbîhê",       desc: "Jimêra înteraktîf bi saet û alarm" },
+          { icon: "📜", title: "Hedîs",                desc: "Kevneşopiyên Pêxember û jiyana Xelîfan" },
+          { icon: "🌍", title: "Pirzimanî",             desc: "Erebî • Îngilîzî • Spanî • Kurdî • ..." },
+        ]
+      },
+      am: {
+        name: "አማርኛ", flag: "🇪🇹", dir: "ltr",
+        title: "የቁርዓን ሬዲዮ",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "ሱረቱል ኢስራእ — አያ 9",
+        cta: "አሁን ማዳመጥ ጀምሩ",
+        ctaSub: "ነፃ ቀጥታ ስርጭት • 24 ሰዓት / 7 ቀናት",
+        features: [
+          { icon: "🎙️", title: "የቁርዓን ንባብ",       desc: "ታዋቂ ቃሪዎች ቀን ከሌት ያሰራጫሉ" },
+          { icon: "🌿", title: "አዝካር እና ዱዓ",       desc: "የጠዋትና የምሽት ዝክሮች ከራስ-ሰር ማሳሰቢያ ጋር" },
+          { icon: "📖", title: "ቅዱስ ቁርዓን",         desc: "የመዲና ሙስሃፍ በጣቢያው ውስጥ ተቀናጅቷል" },
+          { icon: "📿", title: "የተስቢህ ቆጣሪ",       desc: "ከሰዓት ቆጣሪ እና ማንቂያ ጋር መስተጋብራዊ ቆጣሪ" },
+          { icon: "📜", title: "ሃዲስ",              desc: "የነብያዊ ወጎች እና የሰሃቦች የሕይወት ታሪኮች" },
+          { icon: "🌍", title: "ብዙ ቋንቋ",           desc: "አረብኛ • እንግሊዝኛ • ስፓኒሽ • አማርኛ • ..." },
+        ]
+      },
+      om: {
+        name: "Afaan Oromoo", flag: "🇪🇹", dir: "ltr",
+        title: "Raadiyoo Qur'aanaa",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Suuraa Al-Isra — Aayah 9",
+        cta: "Dhaggeeffachuu Eegali",
+        ctaSub: "Tamsaasa kallattii bilisaa • Saatii 24 / Guyyaa 7",
+        features: [
+          { icon: "🎙️", title: "Dubbisaa Qur'aanaa",  desc: "Dubbistoonni beekamoon sa'aatii 24 ni tamsaasu" },
+          { icon: "🌿", title: "Zikrii fi Du'aa",       desc: "Yaadannoo ganama fi galgalaa fi yaadachiisa ofumaan" },
+          { icon: "📖", title: "Qur'aana Qulqulluu",   desc: "Mushafa Madinaa marsariitii keessatti kan walitti dhufeenya qabu" },
+          { icon: "📿", title: "Lakkoofsa Tasbiihaa",  desc: "Lakkoofsa wal-makiinsaa yeroo fi doordii wajjin" },
+          { icon: "📜", title: "Hadiisa",              desc: "Aadaa Nabii fi seenaa jireenyaa Sahaabotaa" },
+          { icon: "🌍", title: "Afaan Hedduu",         desc: "Arabiffaa • Ingliffaa • Afaan Oromoo • ..." },
+        ]
+      },
+      wo: {
+        name: "Wolof", flag: "🇸🇳", dir: "ltr",
+        title: "Radio Koran bi",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Suurat Al-Isra — Aayatu 9",
+        cta: "Tàkku Ngëm Ci Kanam",
+        ctaSub: "Yëgël teel bu soriñ • 24 waxtu / 7 fan",
+        features: [
+          { icon: "🎙️", title: "Xam Koran bi",         desc: "Jëf-jëf yu xam-xam yi yëgëlël ci kaw benn-benn" },
+          { icon: "🌿", title: "Adkaar ak Dua yi",      desc: "Xalifaat suba ak ngoon ak liggéeyukaay baax bu dul sëdd" },
+          { icon: "📖", title: "Koran bu Sëriñ bi",     desc: "Mushaf Madiina bëgg-bëgg ci site bi" },
+          { icon: "📿", title: "Jëfandikoo Tasbix",     desc: "Jëfandikoo wu wax ak saa yi ak dolli" },
+          { icon: "📜", title: "Hadis",                 desc: "Sunna Yëlla Ji ak tariix Sahaabaat yi" },
+          { icon: "🌍", title: "Xam Bari",              desc: "Araab • Angale • Faransis • Wolof • ..." },
+        ]
+      },
+      sq: {
+        name: "Shqip", flag: "🇦🇱", dir: "ltr",
+        title: "Radio Kurani",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surja Al-Isra — Ajeti 9",
+        cta: "Fillo të Dëgjosh",
+        ctaSub: "Transmetim i drejtpërdrejtë falas • 24 orë / 7 ditë",
+        features: [
+          { icon: "🎙️", title: "Recitimi i Kuranit",   desc: "Recitues të famshëm transmetojnë gjatë gjithë ditës" },
+          { icon: "🌿", title: "Dhikri dhe Duatë",      desc: "Kujtime mëngjesi dhe mbrëmjeje me rikujtues automatikë" },
+          { icon: "📖", title: "Kurani i Shenjtë",      desc: "Mushafi i Medinës i integruar në faqe" },
+          { icon: "📿", title: "Numëruesi Tesbih",      desc: "Numërues interaktiv me kohëmatës dhe alarm" },
+          { icon: "📜", title: "Hadithi",               desc: "Traditat profetike dhe biografitë e Sahabëve" },
+          { icon: "🌍", title: "Shumëgjuhësh",          desc: "Arabisht • Anglisht • Turqisht • Shqip • ..." },
+        ]
+      },
+      ru: {
+        name: "Русский", flag: "🇷🇺", dir: "ltr",
+        title: "Радио Корана",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Сура Аль-Исра — Аят 9",
+        cta: "Начать слушать",
+        ctaSub: "Бесплатная трансляция • 24 часа / 7 дней",
+        features: [
+          { icon: "🎙️", title: "Чтение Корана",      desc: "Известные чтецы вещают круглосуточно" },
+          { icon: "🌿", title: "Азкар и Дуа",         desc: "Утренние и вечерние поминания с напоминаниями" },
+          { icon: "📖", title: "Священный Коран",     desc: "Мусхаф Медины интегрирован на сайте" },
+          { icon: "📿", title: "Счётчик Тасбих",      desc: "Интерактивный счётчик с таймером и будильником" },
+          { icon: "📜", title: "Хадис",               desc: "Пророческие предания и биографии сподвижников" },
+          { icon: "🌍", title: "Многоязычный",        desc: "Арабский • Английский • Испанский • Русский • ..." },
+        ]
+      },
+      zh: {
+        name: "中文", flag: "🇨🇳", dir: "ltr",
+        title: "古兰经电台",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "苏拉伊斯拉 — 第9节",
+        cta: "立即收听",
+        ctaSub: "免费直播 • 每天24小时 / 每周7天",
+        features: [
+          { icon: "🎙️", title: "古兰经诵读",    desc: "著名诵读者全天候广播" },
+          { icon: "🌿", title: "祈祷与赞美",    desc: "晨昏记念词与自动提醒" },
+          { icon: "📖", title: "神圣古兰经",    desc: "麦地那版古兰经已集成" },
+          { icon: "📿", title: "念珠计数器",    desc: "带计时器和闹钟的互动计数器" },
+          { icon: "📜", title: "圣训",          desc: "先知传统与圣门弟子传记" },
+          { icon: "🌍", title: "多语言支持",    desc: "阿拉伯语 • 英语 • 西班牙语 • 法语 • ..." },
         ]
       },
       de: {
@@ -625,52 +978,52 @@
           { icon: "🌍", title: "Mehrsprachig",          desc: "Arabisch • Englisch • Spanisch • Deutsch • ..." },
         ]
       },
-      ja: {
-        name: "日本語", flag: "🇯🇵", dir: "ltr",
-        title: "クルアーンラジオ",
+      pt: {
+        name: "Português", flag: "🇧🇷", dir: "ltr",
+        title: "Rádio Alcorão",
         subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "スーラ・アル＝イスラー — 第9節",
-        cta: "今すぐ聴く",
-        ctaSub: "無料ライブ配信 • 24時間 / 7日間",
+        ayahRef: "Surata Al-Isra — Versículo 9",
+        cta: "Começar a Ouvir",
+        ctaSub: "Transmissão ao vivo gratuita • 24 horas / 7 dias",
         features: [
-          { icon: "🎙️", title: "クルアーン朗誦",    desc: "著名な朗誦者が24時間放送" },
-          { icon: "🌿", title: "ズィクルと祈り",    desc: "朝夕のズィクルと自動リマインダー" },
-          { icon: "📖", title: "聖クルアーン",      desc: "マディーナ版クルアーンをサイトに統合" },
-          { icon: "📿", title: "タスビーフカウンター", desc: "タイマーとアラーム付きインタラクティブカウンター" },
-          { icon: "📜", title: "ハディース",        desc: "預言者の伝承とサハーバの伝記" },
-          { icon: "🌍", title: "多言語対応",        desc: "アラビア語 • 英語 • スペイン語 • 日本語 • ..." },
+          { icon: "🎙️", title: "Recitações do Corão",    desc: "Famosos recitadores transmitindo 24 horas" },
+          { icon: "🌿", title: "Adhkar e Súplicas",       desc: "Lembretes matinais e noturnos automáticos" },
+          { icon: "📖", title: "Alcorão Sagrado",         desc: "Mushaf de Medina integrado ao site" },
+          { icon: "📿", title: "Contador Tasbih",         desc: "Contador interativo com cronômetro e alarme" },
+          { icon: "📜", title: "Hadith",                  desc: "Tradições proféticas e biografias dos companheiros" },
+          { icon: "🌍", title: "Multilíngue",             desc: "Árabe • Inglês • Espanhol • Francês • ..." },
         ]
       },
-      ko: {
-        name: "한국어", flag: "🇰🇷", dir: "ltr",
-        title: "꾸란 라디오",
+      es: {
+        name: "Español", flag: "🇪🇸", dir: "ltr",
+        title: "Radio del Corán",
         subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "수라 알-이스라 — 9절",
-        cta: "지금 듣기",
-        ctaSub: "무료 라이브 스트리밍 • 24시간 / 7일",
+        ayahRef: "Sura Al-Isra — Verso 9",
+        cta: "Comenzar a Escuchar",
+        ctaSub: "Transmisión en vivo gratuita • 24 horas / 7 días",
         features: [
-          { icon: "🎙️", title: "꾸란 낭송",       desc: "유명 낭송자들의 24시간 방송" },
-          { icon: "🌿", title: "지크르와 두아",    desc: "아침저녁 지크르와 자동 알림" },
-          { icon: "📖", title: "성 꾸란",          desc: "마디나 무스하프 사이트 통합" },
-          { icon: "📿", title: "타스비흐 카운터", desc: "타이머와 알람이 있는 인터랙티브 카운터" },
-          { icon: "📜", title: "하디스",           desc: "예언자 전통과 사하바 전기" },
-          { icon: "🌍", title: "다국어 지원",      desc: "아랍어 • 영어 • 스페인어 • 한국어 • ..." },
+          { icon: "🎙️", title: "Recitaciones del Corán", desc: "Famosos recitadores transmitiendo las 24 horas" },
+          { icon: "🌿", title: "Adhkar y Súplicas",       desc: "Recordatorios matutinos y vespertinos automáticos" },
+          { icon: "📖", title: "Corán Sagrado",           desc: "Mushaf de Medina integrado en el sitio" },
+          { icon: "📿", title: "Contador de Tasbih",      desc: "Contador interactivo con temporizador y alarma" },
+          { icon: "📜", title: "Hadith",                  desc: "Tradiciones proféticas y biografías de compañeros" },
+          { icon: "🌍", title: "Multilingüe",             desc: "Árabe • Inglés • Español • Francés • ..." },
         ]
       },
-      tr: {
-        name: "Türkçe", flag: "🇹🇷", dir: "ltr",
-        title: "Kuran Radyosu",
+      tl: {
+        name: "Filipino", flag: "🇵🇭", dir: "ltr",
+        title: "Quran Radio",
         subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "İsra Suresi — 9. Ayet",
-        cta: "Dinlemeye Başla",
-        ctaSub: "Ücretsiz canlı yayın • 24 saat / 7 gün",
+        ayahRef: "Surah Al-Isra — Talata 9",
+        cta: "Magsimulang Makinig",
+        ctaSub: "Libreng live stream • 24 oras / 7 araw",
         features: [
-          { icon: "🎙️", title: "Kuran Tilaveti",     desc: "Ünlü hafızlardan 7/24 yayın" },
-          { icon: "🌿", title: "Zikir ve Dualar",     desc: "Sabah-akşam zikirleri ve otomatik hatırlatıcı" },
-          { icon: "📖", title: "Kutsal Kuran",        desc: "Medine Mushafı siteye entegre edildi" },
-          { icon: "📿", title: "Tesbih Sayacı",       desc: "Zamanlayıcı ve alarmla interaktif sayaç" },
-          { icon: "📜", title: "Hadis",               desc: "Nebevi gelenekler ve sahabe biyografileri" },
-          { icon: "🌍", title: "Çok Dilli",           desc: "Arapça • İngilizce • İspanyolca • Türkçe • ..." },
+          { icon: "🎙️", title: "Pagbabasa ng Quran",  desc: "Mga sikat na reciter na nagba-broadcast 24 oras" },
+          { icon: "🌿", title: "Adhkar at Dua",        desc: "Umaga at gabi na paalala na may awtomatikong notipikasyon" },
+          { icon: "📖", title: "Banal na Quran",       desc: "Mushaf ng Madinah na isinama sa site" },
+          { icon: "📿", title: "Tasbih Counter",       desc: "Interactive na counter na may timer at alarm" },
+          { icon: "📜", title: "Hadith",               desc: "Mga tradisyon ng Propeta at talambuhay ng Sahaba" },
+          { icon: "🌍", title: "Maraming Wika",        desc: "Arabik • Ingles • Espanyol • Filipino • ..." },
         ]
       },
       vi: {
@@ -705,20 +1058,36 @@
           { icon: "🌍", title: "หลายภาษา",          desc: "อาหรับ • อังกฤษ • สเปน • ไทย • ..." },
         ]
       },
-      fa: {
-        name: "فارسی", flag: "🇮🇷", dir: "rtl",
-        title: "رادیو قرآن",
+      it: {
+        name: "Italiano", flag: "🇮🇹", dir: "ltr",
+        title: "Radio Corano",
         subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "سوره الاسراء — آیه ۹",
-        cta: "همین حالا گوش دهید",
-        ctaSub: "پخش زنده رایگان • ۲۴ ساعت / ۷ روز",
+        ayahRef: "Sura Al-Isra — Versetto 9",
+        cta: "Inizia ad Ascoltare",
+        ctaSub: "Streaming live gratuito • 24 ore / 7 giorni",
         features: [
-          { icon: "🎙️", title: "تلاوت قرآن",        desc: "قاریان مشهور به صورت شبانه‌روزی پخش می‌کنند" },
-          { icon: "🌿", title: "اذکار و دعاها",      desc: "اذکار صبح و شام با یادآوری خودکار" },
-          { icon: "📖", title: "قرآن مجید",          desc: "مصحف مدینه در سایت ادغام شده است" },
-          { icon: "📿", title: "شمارنده تسبیح",      desc: "شمارنده تعاملی با تایمر و زنگ هشدار" },
-          { icon: "📜", title: "حدیث",               desc: "سنت نبوی و زندگینامه صحابه کرام" },
-          { icon: "🌍", title: "چند زبانه",          desc: "عربی • انگلیسی • اسپانیایی • فارسی • ..." },
+          { icon: "🎙️", title: "Recitazioni del Corano", desc: "Famosi recitatori in onda 24 ore su 24" },
+          { icon: "🌿", title: "Adhkar e Invocazioni",    desc: "Ricordi mattutini e serali con promemoria" },
+          { icon: "📖", title: "Sacro Corano",            desc: "Mushaf di Medina integrato nel sito" },
+          { icon: "📿", title: "Contatore Tasbih",        desc: "Contatore interattivo con timer e sveglia" },
+          { icon: "📜", title: "Hadith",                  desc: "Tradizioni profetiche e biografie dei Compagni" },
+          { icon: "🌍", title: "Multilingue",             desc: "Arabo • Inglese • Spagnolo • Italiano • ..." },
+        ]
+      },
+      nl: {
+        name: "Nederlands", flag: "🇳🇱", dir: "ltr",
+        title: "Koran Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Soera Al-Isra — Vers 9",
+        cta: "Begin met Luisteren",
+        ctaSub: "Gratis livestream • 24 uur / 7 dagen",
+        features: [
+          { icon: "🎙️", title: "Koran Recitaties",    desc: "Beroemde recitatoren die 24 uur per dag uitzenden" },
+          { icon: "🌿", title: "Adhkar & Smeekbedes",  desc: "Ochtend- en avondgebeden met herinneringen" },
+          { icon: "📖", title: "Heilige Koran",        desc: "Mushaf van Medina geïntegreerd op de site" },
+          { icon: "📿", title: "Tasbih Teller",        desc: "Interactieve teller met timer en alarm" },
+          { icon: "📜", title: "Hadith",               desc: "Profetische overleveringen en biografieën van Metgezellen" },
+          { icon: "🌍", title: "Meertalig",            desc: "Arabisch • Engels • Spaans • Nederlands • ..." },
         ]
       },
       pl: {
@@ -737,46 +1106,303 @@
           { icon: "🌍", title: "Wielojęzyczny",       desc: "Arabski • Angielski • Hiszpański • Polski • ..." },
         ]
       },
-      ha: {
-        name: "Hausa", flag: "🇳🇬", dir: "ltr",
-        title: "Rediyon Alƙur'ani",
+      uk: {
+        name: "Українська", flag: "🇺🇦", dir: "ltr",
+        title: "Радіо Корану",
         subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "Suratul Isra'i — Aya ta 9",
-        cta: "Fara Sauraro Yanzu",
-        ctaSub: "Watsa shirye-shirye kyauta • Awanni 24 / Kwanaki 7",
+        ayahRef: "Сура Аль-Ісра — Аят 9",
+        cta: "Почати слухати",
+        ctaSub: "Безкоштовна трансляція • 24 години / 7 днів",
         features: [
-          { icon: "🎙️", title: "Karatun Alƙur'ani",  desc: "Mashahuran masu karatu suna watsa shirye-shirye" },
-          { icon: "🌿", title: "Azkar da Addu'o'i",   desc: "Azkar na safe da yamma tare da tunatarwa" },
-          { icon: "📖", title: "Alƙur'anin Mai Tsarki", desc: "Mushafin Madina ya haɗe a cikin shafin" },
-          { icon: "📿", title: "Ma'aunin Tasbih",     desc: "Ma'aunin hulɗa tare da agogo da faɗakarwa" },
-          { icon: "📜", title: "Hadisi",              desc: "Al'adun Annabi da tarihin Sahabbai" },
-          { icon: "🌍", title: "Harsuna da yawa",     desc: "Larabci • Turanci • Sipaniyanci • Hausa • ..." },
+          { icon: "🎙️", title: "Читання Корану",      desc: "Відомі читці мовлять цілодобово" },
+          { icon: "🌿", title: "Азкар і Дуа",          desc: "Ранкові та вечірні поминання з нагадуваннями" },
+          { icon: "📖", title: "Священний Коран",      desc: "Мусхаф Медини інтегровано на сайті" },
+          { icon: "📿", title: "Лічильник Тасбіх",     desc: "Інтерактивний лічильник з таймером і будильником" },
+          { icon: "📜", title: "Хадис",                desc: "Пророчі перекази та біографії сподвижників" },
+          { icon: "🌍", title: "Багатомовний",         desc: "Арабська • Англійська • Іспанська • Українська • ..." },
         ]
       },
-      am: {
-        name: "አማርኛ", flag: "🇪🇹", dir: "ltr",
-        title: "የቁርዓን ሬዲዮ",
+      bs: {
+        name: "Bosanski", flag: "🇧🇦", dir: "ltr",
+        title: "Kur'an Radio",
         subtitle: "إذاعة القرآن الكريم • RADIO MA",
-        ayahRef: "ሱረቱል ኢስራእ — አያ 9",
-        cta: "አሁን ማዳመጥ ጀምሩ",
-        ctaSub: "ነፃ ቀጥታ ስርጭት • 24 ሰዓት / 7 ቀናት",
+        ayahRef: "Sura Al-Isra — Ajet 9",
+        cta: "Počni Slušati",
+        ctaSub: "Besplatni prijenos uživo • 24 sata / 7 dana",
         features: [
-          { icon: "🎙️", title: "የቁርዓን ንባብ",       desc: "ታዋቂ ቃሪዎች ቀን ከሌት ያሰራጫሉ" },
-          { icon: "🌿", title: "አዝካር እና ዱዓ",       desc: "የጠዋትና የምሽት ዝክሮች ከራስ-ሰር ማሳሰቢያ ጋር" },
-          { icon: "📖", title: "ቅዱስ ቁርዓን",         desc: "የመዲና ሙስሃፍ በጣቢያው ውስጥ ተቀናጅቷል" },
-          { icon: "📿", title: "የተስቢህ ቆጣሪ",       desc: "ከሰዓት ቆጣሪ እና ማንቂያ ጋር መስተጋብራዊ ቆጣሪ" },
-          { icon: "📜", title: "ሃዲስ",              desc: "የነብያዊ ወጎች እና የሰሃቦች የሕይወት ታሪኮች" },
-          { icon: "🌍", title: "ብዙ ቋንቋ",           desc: "አረብኛ • እንግሊዝኛ • ስፓኒሽ • አማርኛ • ..." },
+          { icon: "🎙️", title: "Recitacije Kur'ana",   desc: "Poznati kari'e emituju non-stop" },
+          { icon: "🌿", title: "Zikr i Dova",           desc: "Jutarnji i večernji zikr s automatskim podsjetnicima" },
+          { icon: "📖", title: "Plemeniti Kur'an",      desc: "Medinski mushaf integriran na stranici" },
+          { icon: "📿", title: "Tespih Brojač",         desc: "Interaktivni brojač s timerom i alarmom" },
+          { icon: "📜", title: "Hadis",                 desc: "Vjerodostojne predaje i biografije ashaba" },
+          { icon: "🌍", title: "Višejezičan",           desc: "Arapski • Engleski • Španski • Bosanski • ..." },
+        ]
+      },
+      hr: {
+        name: "Hrvatski", flag: "🇭🇷", dir: "ltr",
+        title: "Kuran Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Sura Al-Isra — Ajet 9",
+        cta: "Počni Slušati",
+        ctaSub: "Besplatni prijenos uživo • 24 sata / 7 dana",
+        features: [
+          { icon: "🎙️", title: "Recitacije Kur'ana",   desc: "Poznati recitatori emitiraju non-stop" },
+          { icon: "🌿", title: "Adhkar i Dova",         desc: "Jutarnji i večernji zikr s automatskim podsjetnicima" },
+          { icon: "📖", title: "Sveti Kur'an",          desc: "Medinski mushaf integriran na stranici" },
+          { icon: "📿", title: "Tesbih Brojač",         desc: "Interaktivni brojač s timerom i alarmom" },
+          { icon: "📜", title: "Hadis",                 desc: "Vjerodostojne predaje i biografije ashaba" },
+          { icon: "🌍", title: "Višejezičan",           desc: "Arapski • Engleski • Španjolski • Hrvatski • ..." },
+        ]
+      },
+      bg: {
+        name: "Български", flag: "🇧🇬", dir: "ltr",
+        title: "Коран Радио",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Сура Ал-Исра — Аят 9",
+        cta: "Започни да слушаш",
+        ctaSub: "Безплатно live излъчване • 24 часа / 7 дни",
+        features: [
+          { icon: "🎙️", title: "Рецитации на Корана",  desc: "Известни рецитатори излъчват денонощно" },
+          { icon: "🌿", title: "Адхкар и Дуа",          desc: "Сутрешни и вечерни споменавания с напомняния" },
+          { icon: "📖", title: "Свещеният Коран",       desc: "Медински мусхаф интегриран в сайта" },
+          { icon: "📿", title: "Броячка Тасбих",        desc: "Интерактивна броячка с таймер и аларма" },
+          { icon: "📜", title: "Хадис",                 desc: "Пророчески предания и биографии на сподвижниците" },
+          { icon: "🌍", title: "Многоезичен",           desc: "Арабски • Английски • Испански • Български • ..." },
+        ]
+      },
+      el: {
+        name: "Ελληνικά", flag: "🇬🇷", dir: "ltr",
+        title: "Ραδιόφωνο Κορανίου",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Σούρα Αλ-Ισρά — Στίχος 9",
+        cta: "Ξεκίνα να Ακούς",
+        ctaSub: "Δωρεάν ζωντανή ροή • 24 ώρες / 7 ημέρες",
+        features: [
+          { icon: "🎙️", title: "Απαγγελίες Κορανίου",  desc: "Διάσημοι απαγγελτές μεταδίδουν όλο το εικοσιτετράωρο" },
+          { icon: "🌿", title: "Αντκάρ και Ντουά",      desc: "Πρωινά και βραδινά μνημόσυνα με αυτόματες υπενθυμίσεις" },
+          { icon: "📖", title: "Ιερό Κοράνιο",          desc: "Mushaf της Μεδίνας ενσωματωμένο στον ιστότοπο" },
+          { icon: "📿", title: "Μετρητής Ταξπίχ",       desc: "Διαδραστικός μετρητής με χρονόμετρο και συναγερμό" },
+          { icon: "📜", title: "Χαντίθ",                desc: "Προφητικές παραδόσεις και βιογραφίες των Σαχάμπα" },
+          { icon: "🌍", title: "Πολύγλωσσο",            desc: "Αραβικά • Αγγλικά • Ισπανικά • Ελληνικά • ..." },
+        ]
+      },
+      sv: {
+        name: "Svenska", flag: "🇸🇪", dir: "ltr",
+        title: "Koran Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surah Al-Isra — Vers 9",
+        cta: "Börja Lyssna Nu",
+        ctaSub: "Gratis direktsändning • 24 timmar / 7 dagar",
+        features: [
+          { icon: "🎙️", title: "Koranrecitationer",   desc: "Berömda recitatorer sänder dygnet runt" },
+          { icon: "🌿", title: "Adhkar & Dua",         desc: "Morgon- och kvällsåminnelser med påminnelser" },
+          { icon: "📖", title: "Den Heliga Koranen",   desc: "Madinah-mushaf integrerad på webbplatsen" },
+          { icon: "📿", title: "Tasbih-räknare",       desc: "Interaktiv räknare med timer och alarm" },
+          { icon: "📜", title: "Hadith",               desc: "Profetiska traditioner och följeslagarnas biografier" },
+          { icon: "🌍", title: "Flerspråkig",          desc: "Arabiska • Engelska • Spanska • Svenska • ..." },
+        ]
+      },
+      da: {
+        name: "Dansk", flag: "🇩🇰", dir: "ltr",
+        title: "Koran Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surah Al-Isra — Vers 9",
+        cta: "Begynd at Lytte Nu",
+        ctaSub: "Gratis livestream • 24 timer / 7 dage",
+        features: [
+          { icon: "🎙️", title: "Koranrecitationer",   desc: "Berømte recitanter sender døgnet rundt" },
+          { icon: "🌿", title: "Adhkar & Dua",         desc: "Morgen- og aftenerindringer med påmindelser" },
+          { icon: "📖", title: "Den Hellige Koran",    desc: "Madina-mushaf integreret på hjemmesiden" },
+          { icon: "📿", title: "Tasbih-tæller",        desc: "Interaktiv tæller med timer og alarm" },
+          { icon: "📜", title: "Hadith",               desc: "Profetiske overleveringer og ledsagernes biografier" },
+          { icon: "🌍", title: "Flersproget",          desc: "Arabisk • Engelsk • Spansk • Dansk • ..." },
+        ]
+      },
+      fi: {
+        name: "Suomi", flag: "🇫🇮", dir: "ltr",
+        title: "Koraani Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Suura Al-Isra — Jae 9",
+        cta: "Aloita Kuuntelu",
+        ctaSub: "Ilmainen suoratoisto • 24 tuntia / 7 päivää",
+        features: [
+          { icon: "🎙️", title: "Koraanin Resitaatio",  desc: "Kuuluisat resitaattorit lähettävät ympäri vuorokauden" },
+          { icon: "🌿", title: "Adhkar ja Dua",         desc: "Aamu- ja iltamuistot automaattisilla muistutuksilla" },
+          { icon: "📖", title: "Pyhä Koraani",          desc: "Medinan mushaf integroitu sivustolle" },
+          { icon: "📿", title: "Tasbih-laskuri",        desc: "Interaktiivinen laskuri ajastimella ja hälytyksellä" },
+          { icon: "📜", title: "Hadiith",               desc: "Profeetallinen perimätieto ja sahabien elämäkerrat" },
+          { icon: "🌍", title: "Monikielinen",          desc: "Arabia • Englanti • Espanja • Suomi • ..." },
+        ]
+      },
+      cs: {
+        name: "Čeština", flag: "🇨🇿", dir: "ltr",
+        title: "Rádio Korán",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Súra Al-Isra — Verš 9",
+        cta: "Začít Poslouchat",
+        ctaSub: "Bezplatný živý přenos • 24 hodin / 7 dní",
+        features: [
+          { icon: "🎙️", title: "Recitace Koránu",     desc: "Slavní recitátoři vysílají nepřetržitě" },
+          { icon: "🌿", title: "Adhkar a Dova",        desc: "Ranní a večerní připomínky s automatickými upozorněními" },
+          { icon: "📖", title: "Svatý Korán",          desc: "Medínský mushaf integrovaný na webu" },
+          { icon: "📿", title: "Počítadlo Tasbih",     desc: "Interaktivní počítadlo s časovačem a budíkem" },
+          { icon: "📜", title: "Hadís",                desc: "Prorocké tradice a biografie společníků" },
+          { icon: "🌍", title: "Vícejazyčný",          desc: "Arabština • Angličtina • Španělština • Čeština • ..." },
+        ]
+      },
+      tk: {
+        name: "Türkmen", flag: "🇹🇲", dir: "ltr",
+        title: "Kuran Radiosy",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Isra Süresi — 9-njy Aýat",
+        cta: "Diňläp Başla",
+        ctaSub: "Mugt göni ýaýlym • 24 sagat / 7 gün",
+        features: [
+          { icon: "🎙️", title: "Kuran Okaýyşlary",    desc: "Meşhur okyjylar gije-gündiz ýaýlym berýär" },
+          { icon: "🌿", title: "Zikir we Doga",         desc: "Ertirlik we agşamlyk zikirleri we ýatlatmalar" },
+          { icon: "📖", title: "Mukaddes Kuran",        desc: "Medine Mushafy sahypada birleşdirilendir" },
+          { icon: "📿", title: "Tesbih Sanawaç",        desc: "Taýmer we duýduryş bilen interaktiw sanawaç" },
+          { icon: "📜", title: "Hadys",                 desc: "Pygamber däpleri we sahabalaryň terjimehaly" },
+          { icon: "🌍", title: "Köp Dilli",             desc: "Arap • Iňlis • Ispan • Türkmen • ..." },
+        ]
+      },
+      be: {
+        name: "Беларуская", flag: "🇧🇾", dir: "ltr",
+        title: "Радыё Карана",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Сура Аль-Ісра — Аят 9",
+        cta: "Пачаць Слухаць",
+        ctaSub: "Бясплатная трансляцыя • 24 гадзіны / 7 дзён",
+        features: [
+          { icon: "🎙️", title: "Чытанне Карана",       desc: "Вядомыя чытцы вяшчаюць цэлыя суткі" },
+          { icon: "🌿", title: "Азкар і Дуа",           desc: "Ранішнія і вячэрнія памяці з напамінамі" },
+          { icon: "📖", title: "Свяшчэнны Каран",       desc: "Мусхаф Медыны інтэграваны на сайце" },
+          { icon: "📿", title: "Лічыльнік Тасбіх",      desc: "Інтэрактыўны лічыльнік з таймерам і будзільнікам" },
+          { icon: "📜", title: "Хадыс",                 desc: "Прарочыя паданні і біяграфіі сподзвіжнікаў" },
+          { icon: "🌍", title: "Шматмоўны",             desc: "Арабская • Англійская • Іспанская • Беларуская • ..." },
+        ]
+      },
+      lv: {
+        name: "Latviešu", flag: "🇱🇻", dir: "ltr",
+        title: "Korāna Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Sūra Al-Isra — Pants 9",
+        cta: "Sākt Klausīties",
+        ctaSub: "Bezmaksas tiešraide • 24 stundas / 7 dienas",
+        features: [
+          { icon: "🎙️", title: "Korāna Recitācijas",   desc: "Slaveni recitētāji raidīja visu diennakti" },
+          { icon: "🌿", title: "Adhkar un Dua",         desc: "Rīta un vakara piemiņas ar atgādinājumiem" },
+          { icon: "📖", title: "Svētais Korāns",        desc: "Madīnas mushaf integrēts vietnē" },
+          { icon: "📿", title: "Tasbih Skaitītājs",     desc: "Interaktīvs skaitītājs ar taimeri un modinātāju" },
+          { icon: "📜", title: "Hadīts",                desc: "Pravietiskās tradīcijas un Sahabu biogrāfijas" },
+          { icon: "🌍", title: "Daudzvalodu",           desc: "Arābu • Angļu • Spāņu • Latviešu • ..." },
+        ]
+      },
+      lb: {
+        name: "Lëtzebuergesch", flag: "🇱🇺", dir: "ltr",
+        title: "Quran Radio",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Surah Al-Isra — Vers 9",
+        cta: "Ufänken ze Nolauschteren",
+        ctaSub: "Gratis Livestream • 24 Stonnen / 7 Deeg",
+        features: [
+          { icon: "🎙️", title: "Quran Rezitatiounen",  desc: "Berühmte Rezitateuren senken rondrëm d'Auer" },
+          { icon: "🌿", title: "Adhkar & Dua",          desc: "Moies a Owesdgebeder mat Erënnerungen" },
+          { icon: "📖", title: "Den Hellege Quran",     desc: "Madina-Mushaf an der Websäit integréiert" },
+          { icon: "📿", title: "Tasbih-Zieler",         desc: "Interaktive Zieler mat Timer an Alarm" },
+          { icon: "📜", title: "Hadith",                desc: "Prophetescht Iwwerleiwerungen a Begleeder-Biographien" },
+          { icon: "🌍", title: "Méisproocheg",          desc: "Arabesch • Englesch • Spuenesch • Lëtzebuergesch • ..." },
+        ]
+      },
+      ga: {
+        name: "Gaeilge", flag: "🇮🇪", dir: "ltr",
+        title: "Raidió an Choráin",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Súra Al-Isra — Véarsa 9",
+        cta: "Tosaigh ag Éisteacht",
+        ctaSub: "Sruthú beo saor in aisce • 24 uair / 7 lá",
+        features: [
+          { icon: "🎙️", title: "Aithriseoirí Coráin",  desc: "Léitheoirí cáiliúla ag craoladh an chloig" },
+          { icon: "🌿", title: "Adhkar agus Dua",       desc: "Cuimhneacháin mhaidine agus tráthnóna" },
+          { icon: "📖", title: "An Corán Naofa",        desc: "Mushaf Mhadína comhtháite sa suíomh" },
+          { icon: "📿", title: "Áireamhán Tasbih",      desc: "Áireamhán idirghníomhach le hama agus aláram" },
+          { icon: "📜", title: "Hadith",                desc: "Traidisiúin fháidhiúla agus beathaisnéisí na gCompánach" },
+          { icon: "🌍", title: "Ilteangach",            desc: "Araibis • Béarla • Spáinnis • Gaeilge • ..." },
+        ]
+      },
+      mi: {
+        name: "Māori", flag: "🇳🇿", dir: "ltr",
+        title: "Reo Irirangi Quran",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "Hura Al-Isra — Rarangi 9",
+        cta: "Tīmata ki te Whakarongo",
+        ctaSub: "Reo irirangi ora koreutu • 24 hāora / 7 rā",
+        features: [
+          { icon: "🎙️", title: "Kōrero Quran",         desc: "Ngā kaipānui rongonui e tuku ana pō me ao" },
+          { icon: "🌿", title: "Adhkar me Dua",         desc: "Ngā whakamaumaharatanga ata me ahiahi" },
+          { icon: "📖", title: "Quran Tapu",            desc: "Mushaf o Madinah kua whakauruhia ki te pae" },
+          { icon: "📿", title: "Kaute Tasbih",          desc: "Kaute taunekeneke me te taima me te waetohu" },
+          { icon: "📜", title: "Hadith",                desc: "Ngā tikanga o te Poropiti me ngā hītori o ngā Hoa" },
+          { icon: "🌍", title: "Reo Maha",              desc: "Arapi • Ingarihi • Paniora • Māori • ..." },
+        ]
+      },
+      ko: {
+        name: "한국어", flag: "🇰🇷", dir: "ltr",
+        title: "꾸란 라디오",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "수라 알-이스라 — 9절",
+        cta: "지금 듣기",
+        ctaSub: "무료 라이브 스트리밍 • 24시간 / 7일",
+        features: [
+          { icon: "🎙️", title: "꾸란 낭송",       desc: "유명 낭송자들의 24시간 방송" },
+          { icon: "🌿", title: "지크르와 두아",    desc: "아침저녁 지크르와 자동 알림" },
+          { icon: "📖", title: "성 꾸란",          desc: "마디나 무스하프 사이트 통합" },
+          { icon: "📿", title: "타스비흐 카운터", desc: "타이머와 알람이 있는 인터랙티브 카운터" },
+          { icon: "📜", title: "하디스",           desc: "예언자 전통과 사하바 전기" },
+          { icon: "🌍", title: "다국어 지원",      desc: "아랍어 • 영어 • 스페인어 • 한국어 • ..." },
+        ]
+      },
+      ja: {
+        name: "日本語", flag: "🇯🇵", dir: "ltr",
+        title: "クルアーンラジオ",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "スーラ・アル＝イスラー — 第9節",
+        cta: "今すぐ聴く",
+        ctaSub: "無料ライブ配信 • 24時間 / 7日間",
+        features: [
+          { icon: "🎙️", title: "クルアーン朗誦",    desc: "著名な朗誦者が24時間放送" },
+          { icon: "🌿", title: "ズィクルと祈り",    desc: "朝夕のズィクルと自動リマインダー" },
+          { icon: "📖", title: "聖クルアーン",      desc: "マディーナ版クルアーンをサイトに統合" },
+          { icon: "📿", title: "タスビーフカウンター", desc: "タイマーとアラーム付きインタラクティブカウンター" },
+          { icon: "📜", title: "ハディース",        desc: "預言者の伝承とサハーバの伝記" },
+          { icon: "🌍", title: "多言語対応",        desc: "アラビア語 • 英語 • スペイン語 • 日本語 • ..." },
+        ]
+      },
+      he: {
+        name: "עברית", flag: "🇮🇱", dir: "rtl",
+        title: "רדיו קוראן",
+        subtitle: "إذاعة القرآن الكريم • RADIO MA",
+        ayahRef: "סורת אל-אסרא — פסוק 9",
+        cta: "התחל להאזין עכשיו",
+        ctaSub: "שידור חי חינמי • 24 שעות / 7 ימים",
+        features: [
+          { icon: "🎙️", title: "קריאת קוראן",         desc: "קוראים מפורסמים משדרים מסביב לשעון" },
+          { icon: "🌿", title: "אדכאר ודועא",          desc: "זיכרי בוקר וערב עם תזכורות אוטומטיות" },
+          { icon: "📖", title: "הקוראן הקדוש",         desc: "מוסחף המדינה משולב באתר" },
+          { icon: "📿", title: "מונה תסביח",           desc: "מונה אינטראקטיבי עם טיימר והתראה" },
+          { icon: "📜", title: "חדית'",                desc: "מסורות נבואיות וביוגרפיות הסאחאבה" },
+          { icon: "🌍", title: "רב-לשוני",             desc: "ערבית • אנגלית • ספרדית • עברית • ..." },
         ]
       }
-    };
+
+        };
 
     // ─────────────────────────────────────────────
     //  DETECT BROWSER LANGUAGE
     // ─────────────────────────────────────────────
     function detectLang() {
       const nav = (navigator.language || navigator.userLanguage || 'ar').toLowerCase().split('-')[0];
-      const map = { ar:'ar', en:'en', zh:'zh', hi:'hi', es:'es', fr:'fr', pt:'pt', ru:'ru', bn:'bn', ur:'ur', id:'id', de:'de', ja:'ja', ko:'ko', tr:'tr', vi:'vi', th:'th', fa:'fa', pl:'pl', ha:'ha', am:'am' };
+      const map = { ar:'ar', en:'en', zh:'zh', hi:'hi', es:'es', fr:'fr', pt:'pt', ru:'ru', bn:'bn', ur:'ur', id:'id', de:'de', ja:'ja', ko:'ko', tr:'tr', vi:'vi', th:'th', fa:'fa', pl:'pl', ha:'ha', am:'am', sw:'sw', it:'it', ms:'ms', yo:'yo', tl:'tl', nl:'nl', uk:'uk', sv:'sv', he:'he', cs:'cs', da:'da', ku:'ku', ga:'ga', lv:'lv', be:'be', lb:'lb', tk:'tk', mi:'mi', hr:'hr', fi:'fi', bs:'bs', bg:'bg', el:'el', pa:'pa', uz:'uz', ps:'ps', sd:'sd', so:'so', kk:'kk', az:'az', tg:'tg', ug:'ug', om:'om', wo:'wo', sq:'sq' };
       return map[nav] || 'ar';
     }
 
@@ -824,17 +1450,80 @@
     }
 
     // ─────────────────────────────────────────────
-    //  BUILD LANG SWITCHER
+    //  BUILD LANG SWITCHER  (top-10 + regions)
     // ─────────────────────────────────────────────
     function buildSwitcher() {
       const switcher = document.getElementById('langSwitcher');
-      Object.entries(translations).forEach(([code, t]) => {
+
+      // ── أول 10 الأكثر انتشاراً عالمياً (إجمالي المتحدثين) ──
+      const top10 = ['en','zh','hi','es','fr','ar','bn','pt','ru','ur'];
+
+      // ── المجموعات الجغرافية (بدون أسماء) ──
+      const regions = [
+        {
+          // أوروبا
+          langs: ['de','it','nl','pl','uk','sv','da','fi','cs','bg','hr','bs','el','sq','be','lv','lb','ga','he','mi']
+        },
+        {
+          // آسيا الجنوبية والشرقية
+          langs: ['pa','sd','ps','id','ms','tl','vi','th','ko','ja','tg','uz','kk','az','ug','tk']
+        },
+        {
+          // الشرق الأوسط وآسيا الوسطى
+          langs: ['fa','tr','ku']
+        },
+        {
+          // أفريقيا
+          langs: ['ha','sw','yo','so','am','om','wo']
+        },
+      ];
+
+      // helper: make a button
+      function makeBtn(code, isTop) {
+        const t = translations[code];
+        if (!t) return null;
         const btn = document.createElement('button');
-        btn.className = 'lang-btn';
+        btn.className = 'lang-btn' + (isTop ? ' top' : '');
         btn.dataset.lang = code;
         btn.textContent = t.flag + ' ' + t.name;
         btn.onclick = () => applyLang(code);
-        switcher.appendChild(btn);
+        return btn;
+      }
+
+      // helper: append a row of buttons in pairs
+      function appendRow(codes, isTop) {
+        for (let i = 0; i < codes.length; i += 2) {
+          const row = document.createElement('div');
+          row.className = 'lang-row' + (isTop ? ' top10' : '');
+          const b1 = makeBtn(codes[i], isTop);
+          if (b1) row.appendChild(b1);
+          if (codes[i+1]) {
+            const b2 = makeBtn(codes[i+1], isTop);
+            if (b2) row.appendChild(b2);
+          }
+          switcher.appendChild(row);
+        }
+      }
+
+      // ── قسم أول 10 (بدون عنوان) ──
+      appendRow(top10, true);
+
+      // ── فاصل بعد أول 10 ──
+      const div = document.createElement('div');
+      div.className = 'lang-divider';
+      switcher.appendChild(div);
+
+      // ── المناطق (فاصل بسيط بين كل قارة) ──
+      const alreadyShown = new Set(top10);
+      regions.forEach(region => {
+        const validLangs = region.langs.filter(c => translations[c] && !alreadyShown.has(c));
+        if (validLangs.length === 0) return;
+        validLangs.forEach(c => alreadyShown.add(c));
+
+        const divider = document.createElement('div');
+        divider.className = 'lang-divider';
+        switcher.appendChild(divider);
+        appendRow(validLangs, false);
       });
     }
 
