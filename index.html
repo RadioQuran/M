@@ -268,10 +268,18 @@
 
     .features {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
       width: 100%;
       animation: fadeUp 1s ease 0.5s both;
+    }
+
+    @media (max-width: 900px) {
+      .features { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 520px) {
+      .features { grid-template-columns: 1fr; }
     }
 
     .feature {
@@ -370,7 +378,136 @@
       50%       { transform: scale(1.08); }
     }
 
-    /* LTR override for non-Arabic languages */
+    /* ── Language Search ── */
+    .lang-search {
+      width: 100%;
+      padding: 6px 10px;
+      margin-bottom: 8px;
+      background: rgba(13,51,38,0.5);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 8px;
+      color: var(--text-light);
+      font-family: 'Tajawal', sans-serif;
+      font-size: 0.8rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .lang-search::placeholder { color: rgba(245,239,224,0.35); }
+    .lang-search:focus { border-color: rgba(201,168,76,0.5); }
+
+    /* ── Stats Counter Bar ── */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: clamp(16px, 4vw, 48px);
+      width: 100%;
+      animation: fadeUp 1s ease 0.4s both;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Amiri', serif;
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+      font-weight: 700;
+      color: var(--gold-light);
+      display: block;
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: clamp(0.65rem, 2vw, 0.78rem);
+      color: rgba(245,239,224,0.5);
+      margin-top: 4px;
+      display: block;
+      letter-spacing: 0.04em;
+    }
+    .stat-sep {
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(201,168,76,0.3), transparent);
+      align-self: stretch;
+    }
+
+    /* ── Dhikr Ticker ── */
+    .dhikr-ticker {
+      width: 100%;
+      overflow: hidden;
+      position: relative;
+      padding: 10px 0;
+      animation: fadeUp 1s ease 0.85s both;
+    }
+    .dhikr-ticker::before,
+    .dhikr-ticker::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 48px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .dhikr-ticker::before {
+      right: 0;
+      background: linear-gradient(to left, var(--green-deep), transparent);
+    }
+    .dhikr-ticker::after {
+      left: 0;
+      background: linear-gradient(to right, var(--green-deep), transparent);
+    }
+    .dhikr-track {
+      display: flex;
+      gap: 0;
+      width: max-content;
+      animation: ticker 28s linear infinite;
+    }
+    .dhikr-track:hover { animation-play-state: paused; }
+    .dhikr-item {
+      white-space: nowrap;
+      font-family: 'Amiri', serif;
+      font-size: clamp(0.85rem, 2.5vw, 1rem);
+      color: rgba(201,168,76,0.7);
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .dhikr-dot {
+      width: 4px; height: 4px;
+      background: rgba(201,168,76,0.4);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── Clickable Feature Cards ── */
+    .feature {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      transition: transform 0.25s, border-color 0.25s, background 0.25s;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+    .feature:hover {
+      transform: translateY(-4px);
+      border-color: rgba(201,168,76,0.5);
+      background: rgba(201,168,76,0.07);
+    }
+    .feature:hover .feature-arrow { opacity: 1; transform: translateX(0); }
+    .feature-arrow {
+      font-size: 0.65rem;
+      color: rgba(201,168,76,0.5);
+      margin-top: 8px;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.2s, transform 0.2s;
+      display: block;
+    }
     body.ltr {
       font-family: 'Tajawal', sans-serif;
       direction: ltr;
@@ -421,6 +558,29 @@
       <p class="ayah-ref" id="ayahRef">سورة الإسراء — الآية ٩</p>
     </div>
 
+    <!-- Stats Counter Bar -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-item">
+        <span class="stat-num" id="cnt-langs">0</span>
+        <span class="stat-label" id="lbl-langs">لغة</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-item">
+        <span class="stat-num" id="cnt-stations">0</span>
+        <span class="stat-label" id="lbl-stations">إذاعة</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-item">
+        <span class="stat-num">24/7</span>
+        <span class="stat-label" id="lbl-live">بث مباشر</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-item">
+        <span class="stat-num" id="cnt-reciters">0</span>
+        <span class="stat-label" id="lbl-reciters">قارئ</span>
+      </div>
+    </div>
+
     <div class="features" id="featuresGrid"></div>
 
     <div class="cta-wrap">
@@ -429,6 +589,11 @@
         <span id="ctaText">ابدأ الاستماع الآن</span>
       </a>
       <p class="cta-sub" id="ctaSub">بث مباشر مجاني • 24 ساعة / 7 أيام</p>
+    </div>
+
+    <!-- Dhikr Ticker -->
+    <div class="dhikr-ticker" id="dhikrTicker">
+      <div class="dhikr-track" id="dhikrTrack"></div>
     </div>
 
     <footer>
@@ -512,6 +677,8 @@
           { icon: "📿", title: "عداد التسبيح",     desc: "عداد تفاعلي مع مؤقت ومنبه" },
           { icon: "📜", title: "الحديث الشريف",    desc: "السنة النبوية وسير الصحابة الكرام" },
           { icon: "🌍", title: "متعدد اللغات",     desc: "عربي • English • Español • Français • ..." },
+          { icon: "🕌", title: "مواقيت الصلاة", desc: "توقيت الصلوات الخمس حسب موقعك" },
+          { icon: "📱", title: "تطبيق الجوال", desc: "حمّل التطبيق واستمع في أي وقت ومكان" },
         ]
       },
       en: {
@@ -528,6 +695,8 @@
           { icon: "📿", title: "Tasbih Counter",      desc: "Interactive counter with timer and alarm" },
           { icon: "📜", title: "Hadith",              desc: "Prophetic traditions and companions' biographies" },
           { icon: "🌍", title: "Multilingual",        desc: "Arabic • English • Español • Français • ..." },
+          { icon: "🕌", title: "Prayer Times", desc: "Five daily prayer times based on your location" },
+          { icon: "📱", title: "Mobile App", desc: "Download the app and listen anytime, anywhere" },
         ]
       },
       id: {
@@ -544,6 +713,8 @@
           { icon: "📿", title: "Penghitung Tasbih",   desc: "Penghitung interaktif dengan timer dan alarm" },
           { icon: "📜", title: "Hadits",              desc: "Tradisi Nabi dan biografi para sahabat" },
           { icon: "🌍", title: "Multibahasa",         desc: "Arab • Inggris • Spanyol • Indonesia • ..." },
+          { icon: "🕌", title: "Waktu Shalat", desc: "Jadwal shalat lima waktu sesuai lokasi Anda" },
+          { icon: "📱", title: "Aplikasi Mobile", desc: "Unduh aplikasi dan dengarkan kapan saja di mana saja" },
         ]
       },
       ur: {
@@ -560,6 +731,8 @@
           { icon: "📿", title: "تسبیح کاؤنٹر",      desc: "ٹائمر اور الارم کے ساتھ انٹرایکٹو کاؤنٹر" },
           { icon: "📜", title: "حدیث",               desc: "نبوی روایات اور صحابہ کرام کی سیرت" },
           { icon: "🌍", title: "کثیر اللسانی",       desc: "عربی • انگریزی • اسپینی • اردو • ..." },
+          { icon: "🕌", title: "نماز کے اوقات", desc: "آپ کے مقام کے مطابق پانچ وقت کی نماز کا وقت" },
+          { icon: "📱", title: "موبائل ایپ", desc: "ایپ ڈاؤن لوڈ کریں اور کہیں بھی سنیں" },
         ]
       },
       bn: {
@@ -576,6 +749,8 @@
           { icon: "📿", title: "তাসবিহ কাউন্টার",   desc: "টাইমার ও অ্যালার্মসহ ইন্টারেক্টিভ কাউন্টার" },
           { icon: "📜", title: "হাদিস",              desc: "নবী-সুন্নাহ ও সাহাবীদের জীবনী" },
           { icon: "🌍", title: "বহুভাষিক",           desc: "আরবি • ইংরেজি • স্প্যানিশ • বাংলা • ..." },
+          { icon: "🕌", title: "নামাজের সময়", desc: "আপনার অবস্থান অনুযায়ী পাঁচ ওয়াক্ত নামাজের সময়" },
+          { icon: "📱", title: "মোবাইল অ্যাপ", desc: "অ্যাপ ডাউনলোড করুন এবং যেকোনো সময় শুনুন" },
         ]
       },
       hi: {
@@ -592,6 +767,8 @@
           { icon: "📿", title: "तस्बीह काउंटर", desc: "टाइमर और अलार्म के साथ इंटरएक्टिव काउंटर" },
           { icon: "📜", title: "हदीस",           desc: "नबवी परंपराएं और सहाबा की जीवनियां" },
           { icon: "🌍", title: "बहुभाषी",        desc: "अरबी • अंग्रेज़ी • स्पेनिश • फ्रेंच • ..." },
+          { icon: "🕌", title: "नमाज़ के वक़्त", desc: "आपकी लोकेशन के अनुसार पांच वक़्त की नमाज़ का समय" },
+          { icon: "📱", title: "मोबाइल ऐप", desc: "ऐप डाउनलोड करें और कहीं भी सुनें" },
         ]
       },
       pa: {
@@ -608,6 +785,8 @@
           { icon: "📿", title: "ਤਸਬੀਹ ਕਾਊਂਟਰ",   desc: "ਟਾਈਮਰ ਅਤੇ ਅਲਾਰਮ ਨਾਲ ਇੰਟਰੈਕਟਿਵ ਕਾਊਂਟਰ" },
           { icon: "📜", title: "ਹਦੀਸ",             desc: "ਨਬਵੀ ਰਿਵਾਇਤਾਂ ਅਤੇ ਸਹਾਬਾ ਦੀਆਂ ਜੀਵਨੀਆਂ" },
           { icon: "🌍", title: "ਬਹੁਭਾਸ਼ਾਈ",        desc: "ਅਰਬੀ • ਅੰਗਰੇਜ਼ੀ • ਉਰਦੂ • ਪੰਜਾਬੀ • ..." },
+          { icon: "🕌", title: "ਨਮਾਜ਼ ਦੇ ਵਕਤ", desc: "ਤੁਹਾਡੀ ਲੋਕੇਸ਼ਨ ਅਨੁਸਾਰ ਪੰਜ ਵਕਤ ਦੀ ਨਮਾਜ਼ ਦਾ ਸਮਾਂ" },
+          { icon: "📱", title: "ਮੋਬਾਈਲ ਐਪ", desc: "ਐਪ ਡਾਊਨਲੋਡ ਕਰੋ ਅਤੇ ਕਿਤੇ ਵੀ ਸੁਣੋ" },
         ]
       },
       ha: {
@@ -624,6 +803,8 @@
           { icon: "📿", title: "Ma'aunin Tasbih",     desc: "Ma'aunin hulɗa tare da agogo da faɗakarwa" },
           { icon: "📜", title: "Hadisi",              desc: "Al'adun Annabi da tarihin Sahabbai" },
           { icon: "🌍", title: "Harsuna da yawa",     desc: "Larabci • Turanci • Sipaniyanci • Hausa • ..." },
+          { icon: "🕌", title: "Lokacin Sallah", desc: "Lokutan sallar yau bisa wurinku" },
+          { icon: "📱", title: "App na Hannu", desc: "Saukar da app kuma ji ko yaushe ko ina" },
         ]
       },
       fr: {
@@ -640,6 +821,8 @@
           { icon: "📿", title: "Compteur Tasbih",        desc: "Compteur interactif avec minuterie et alarme" },
           { icon: "📜", title: "Hadith",                 desc: "Traditions prophétiques et biographies des compagnons" },
           { icon: "🌍", title: "Multilingue",            desc: "Arabe • Anglais • Espagnol • Français • ..." },
+          { icon: "🕌", title: "Horaires de Prière", desc: "Les cinq prières quotidiennes selon votre position" },
+          { icon: "📱", title: "Application Mobile", desc: "Téléchargez l'appli et écoutez partout, tout le temps" },
         ]
       },
       tr: {
@@ -656,6 +839,8 @@
           { icon: "📿", title: "Tesbih Sayacı",       desc: "Zamanlayıcı ve alarmla interaktif sayaç" },
           { icon: "📜", title: "Hadis",               desc: "Nebevi gelenekler ve sahabe biyografileri" },
           { icon: "🌍", title: "Çok Dilli",           desc: "Arapça • İngilizce • İspanyolca • Türkçe • ..." },
+          { icon: "🕌", title: "Namaz Vakitleri", desc: "Konumunuza göre beş vakit namaz saatleri" },
+          { icon: "📱", title: "Mobil Uygulama", desc: "Uygulamayı indirin ve her yerden dinleyin" },
         ]
       },
       fa: {
@@ -672,6 +857,8 @@
           { icon: "📿", title: "شمارنده تسبیح",      desc: "شمارنده تعاملی با تایمر و زنگ هشدار" },
           { icon: "📜", title: "حدیث",               desc: "سنت نبوی و زندگینامه صحابه کرام" },
           { icon: "🌍", title: "چند زبانه",          desc: "عربی • انگلیسی • اسپانیایی • فارسی • ..." },
+          { icon: "🕌", title: "اوقات نماز", desc: "اوقات پنج نماز روزانه بر اساس موقعیت شما" },
+          { icon: "📱", title: "اپلیکیشن موبایل", desc: "اپ را دانلود کنید و در هر جا گوش دهید" },
         ]
       },
       ps: {
@@ -688,6 +875,8 @@
           { icon: "📿", title: "د تسبیح شمیرنه",     desc: "د ټایمر او الارم سره تعاملي شمیرنه" },
           { icon: "📜", title: "حدیث",                desc: "نبوي روایتونه او د صحابه ژوند لیکونه" },
           { icon: "🌍", title: "ډیرژبي",              desc: "عربي • انګریزي • اردو • پښتو • ..." },
+          { icon: "🕌", title: "د لمانځه وختونه", desc: "ستاسو موقعیت سره سم د پنځو وختونو لمانځه وخت" },
+          { icon: "📱", title: "ګرځنده اپ", desc: "اپ ډاونلوډ کړئ او هر چیرې واورئ" },
         ]
       },
       sd: {
@@ -704,6 +893,8 @@
           { icon: "📿", title: "تسبيح ڪائونٽر",      desc: "ٽائيمر ۽ الارم سان انٽرايڪٽو ڪائونٽر" },
           { icon: "📜", title: "حديث",                desc: "نبوي روايتون ۽ صحابه ڪرام جون سوانح" },
           { icon: "🌍", title: "گهڻن ٻولين ۾",       desc: "عربي • انگريزي • اردو • سنڌي • ..." },
+          { icon: "🕌", title: "نماز جا وقت", desc: "توهان جي مقام موجب پنج وقت جي نماز جو وقت" },
+          { icon: "📱", title: "موبائل ائپ", desc: "ائپ ڊائونلوڊ ڪريو ۽ ڪٿي به ٻڌو" },
         ]
       },
       ms: {
@@ -720,6 +911,8 @@
           { icon: "📿", title: "Pembilang Tasbih",    desc: "Pembilang interaktif dengan pemasa dan penggera" },
           { icon: "📜", title: "Hadith",              desc: "Tradisi Nabi dan biografi para Sahabat" },
           { icon: "🌍", title: "Pelbagai Bahasa",     desc: "Arab • Inggeris • Sepanyol • Melayu • ..." },
+          { icon: "🕌", title: "Waktu Solat", desc: "Jadual solat lima waktu mengikut lokasi anda" },
+          { icon: "📱", title: "Aplikasi Mudah Alih", desc: "Muat turun apl dan dengar di mana-mana sahaja" },
         ]
       },
       sw: {
@@ -736,6 +929,8 @@
           { icon: "📿", title: "Kihesabu cha Tasbih",  desc: "Kihesabu cha mwingiliano na kipima muda na kengele" },
           { icon: "📜", title: "Hadithi",              desc: "Mafundisho ya Mtume na wasifu wa Masahaba" },
           { icon: "🌍", title: "Lugha Nyingi",         desc: "Kiarabu • Kiingereza • Kihispania • Kiswahili • ..." },
+          { icon: "🕌", title: "Nyakati za Sala", desc: "Nyakati za sala tano kulingana na mahali ulipo" },
+          { icon: "📱", title: "Programu ya Simu", desc: "Pakua programu na sikiliza wakati wowote, mahali popote" },
         ]
       },
       uz: {
@@ -752,6 +947,8 @@
           { icon: "📿", title: "Tasbeh Hisoblagich",    desc: "Taymer va signal bilan interaktiv hisoblagich" },
           { icon: "📜", title: "Hadis",                 desc: "Payg'ambar an'analari va sahobalar tarjimai holi" },
           { icon: "🌍", title: "Ko'p tilli",            desc: "Arab • Ingliz • Rus • O'zbek • ..." },
+          { icon: "🕌", title: "Namoz Vaqtlari", desc: "Joylashuvingizga ko'ra besh vaqt namoz vaqtlari" },
+          { icon: "📱", title: "Mobil Ilova", desc: "Ilovani yuklab oling va istalgan joyda tinglang" },
         ]
       },
       yo: {
@@ -768,6 +965,8 @@
           { icon: "📿", title: "Ìlọ Tasbih",          desc: "Ìlọ ìbáṣepọ̀ pẹ̀lú aago àti ìdáhún" },
           { icon: "📜", title: "Hadith",               desc: "Àṣà Annabí àti ìtàn àwọn Ọ̀gbẹni" },
           { icon: "🌍", title: "Èdè Ọ̀pọ̀lọpọ̀",     desc: "Lárúbáwá • Gẹ̀ẹ́sì • Sípáníìsì • Yorùbá • ..." },
+          { icon: "🕌", title: "Àkókò Salah", desc: "Àkókò ìjọsìn márùn lójoojúmọ́ gẹ́gẹ́ bí ibùdó rẹ" },
+          { icon: "📱", title: "Àpẹẹrẹ Fóònù", desc: "Gba àpẹẹrẹ náà kí o sì fetí sí i níbìkíbì" },
         ]
       },
       so: {
@@ -784,6 +983,8 @@
           { icon: "📿", title: "Tirinta Tasbiixda",    desc: "Tiriye waxqabad leh oo leh saacad iyo digniinta" },
           { icon: "📜", title: "Xadiis",               desc: "Dhaqamada Nabiga iyo taariikhdii Saaxiibada" },
           { icon: "🌍", title: "Luqadaha badan",       desc: "Carabi • Ingiriisi • Soomaali • ..." },
+          { icon: "🕌", title: "Wakhtiga Salaadda", desc: "Wakhtiyada salaadda shanta mar maalinlaha ah" },
+          { icon: "📱", title: "App-ka Telefoonka", desc: "Soo degso app-ka oo dhagayso meel kasta" },
         ]
       },
       kk: {
@@ -800,6 +1001,8 @@
           { icon: "📿", title: "Тәсбих Санауышы",      desc: "Таймер мен дабылмен интерактивті санауыш" },
           { icon: "📜", title: "Хадис",                desc: "Пайғамбар дәстүрлері мен сахабалардың өмірбаяны" },
           { icon: "🌍", title: "Көптілді",             desc: "Арабша • Ағылшынша • Орысша • Қазақша • ..." },
+          { icon: "🕌", title: "Намаз Уақыттары", desc: "Орналасқан жеріңізге байланысты бес уақыт намаз" },
+          { icon: "📱", title: "Мобильді Қолданба", desc: "Қолданбаны жүктеп алыңыз және кез келген жерде тыңдаңыз" },
         ]
       },
       az: {
@@ -816,6 +1019,8 @@
           { icon: "📿", title: "Təsbeh Sayğacı",        desc: "Taymer və zəng siqnalı ilə interaktiv sayğac" },
           { icon: "📜", title: "Hədis",                 desc: "Peyğəmbər ənənələri və səhabələrin tərcümeyi-halı" },
           { icon: "🌍", title: "Çoxdilli",              desc: "Ərəb • İngilis • Türk • Azərbaycan • ..." },
+          { icon: "🕌", title: "Namaz Vaxtları", desc: "Yerinizə görə beş vaxt namaz saatları" },
+          { icon: "📱", title: "Mobil Tətbiq", desc: "Tətbiqi yükləyin və istədiyiniz yerdə qulaq asın" },
         ]
       },
       tg: {
@@ -832,6 +1037,8 @@
           { icon: "📿", title: "Ҳисобкунаки Тасбеҳ",   desc: "Ҳисобкунаки интерактивӣ бо таймер ва зангӯла" },
           { icon: "📜", title: "Ҳадис",                 desc: "Суннати набавӣ ва тарҷумаи ҳоли саҳобагон" },
           { icon: "🌍", title: "Бисёрзабона",           desc: "Арабӣ • Англисӣ • Русӣ • Тоҷикӣ • ..." },
+          { icon: "🕌", title: "Вақти Намоз", desc: "Вақти панҷ вақт намоз аз рӯи мавқеи шумо" },
+          { icon: "📱", title: "Барномаи Мобилӣ", desc: "Барномаро боргирӣ кунед ва дар ҳама ҷо гӯш кунед" },
         ]
       },
       ug: {
@@ -848,6 +1055,8 @@
           { icon: "📿", title: "تەسبىھ سانىغۇچى",     desc: "ۋاقىت بەلگىلىگۈچ ۋە سىگنال بىلەن ئىنتىراكتىپ سانىغۇچ" },
           { icon: "📜", title: "ھەدىس",               desc: "پەيغەمبەر سۈننىتى ۋە سەھابىلەرنىڭ تەرجىمىھالى" },
           { icon: "🌍", title: "كۆپ تىللىق",          desc: "ئەرەبچە • ئىنگلىزچە • خەنزۇچە • ئۇيغۇرچە • ..." },
+          { icon: "🕌", title: "نامaz ۋاقتى", desc: "ئورنىڭىزغا ئاساسەن بەش ۋاقت نامازنىڭ ۋاقتى" },
+          { icon: "📱", title: "موبىل ئەپ", desc: "ئەپنى چۈشۈرۈپ ھەر ۋاقىت ھەر يەردە ئاڭلاڭ" },
         ]
       },
       ku: {
@@ -864,6 +1073,8 @@
           { icon: "📿", title: "Jimêra Tesbîhê",       desc: "Jimêra înteraktîf bi saet û alarm" },
           { icon: "📜", title: "Hedîs",                desc: "Kevneşopiyên Pêxember û jiyana Xelîfan" },
           { icon: "🌍", title: "Pirzimanî",             desc: "Erebî • Îngilîzî • Spanî • Kurdî • ..." },
+          { icon: "🕌", title: "Katên Nimêjê", desc: "Katên nimêja rojane li gorî cihê we" },
+          { icon: "📱", title: "Sepana Mobîl", desc: "Sepanê dakêşin û li her derê guhdarî bikin" },
         ]
       },
       am: {
@@ -880,6 +1091,8 @@
           { icon: "📿", title: "የተስቢህ ቆጣሪ",       desc: "ከሰዓት ቆጣሪ እና ማንቂያ ጋር መስተጋብራዊ ቆጣሪ" },
           { icon: "📜", title: "ሃዲስ",              desc: "የነብያዊ ወጎች እና የሰሃቦች የሕይወት ታሪኮች" },
           { icon: "🌍", title: "ብዙ ቋንቋ",           desc: "አረብኛ • እንግሊዝኛ • ስፓኒሽ • አማርኛ • ..." },
+          { icon: "🕌", title: "የሶላት ጊዜ", desc: "በአካባቢዎ ላይ ተመስርቶ የአምስቱ ጊዜ ሶላት ሰዓት" },
+          { icon: "📱", title: "የሞባይል አፕ", desc: "አፕ ያውርዱ እና በማንኛውም ጊዜ ቦታ ያዳምጡ" },
         ]
       },
       om: {
@@ -896,6 +1109,8 @@
           { icon: "📿", title: "Lakkoofsa Tasbiihaa",  desc: "Lakkoofsa wal-makiinsaa yeroo fi doordii wajjin" },
           { icon: "📜", title: "Hadiisa",              desc: "Aadaa Nabii fi seenaa jireenyaa Sahaabotaa" },
           { icon: "🌍", title: "Afaan Hedduu",         desc: "Arabiffaa • Ingliffaa • Afaan Oromoo • ..." },
+          { icon: "🕌", title: "Yeroo Salaataa", desc: "Yeroo salaata daqiqaa shanii guyyaa guyyaatti" },
+          { icon: "📱", title: "Appii Bilbilaa", desc: "Appicha buusii yeroo kamiiyyuu dhaggeeffadhu" },
         ]
       },
       wo: {
@@ -912,6 +1127,8 @@
           { icon: "📿", title: "Jëfandikoo Tasbix",     desc: "Jëfandikoo wu wax ak saa yi ak dolli" },
           { icon: "📜", title: "Hadis",                 desc: "Sunna Yëlla Ji ak tariix Sahaabaat yi" },
           { icon: "🌍", title: "Xam Bari",              desc: "Araab • Angale • Faransis • Wolof • ..." },
+          { icon: "🕌", title: "Waxtam Salaati", desc: "Bëgël salaati juróom fan bi ci kaw yëgël" },
+          { icon: "📱", title: "App bi ci Telefon", desc: "Télécharger app bi te dingeeku ci kanam" },
         ]
       },
       sq: {
@@ -928,6 +1145,8 @@
           { icon: "📿", title: "Numëruesi Tesbih",      desc: "Numërues interaktiv me kohëmatës dhe alarm" },
           { icon: "📜", title: "Hadithi",               desc: "Traditat profetike dhe biografitë e Sahabëve" },
           { icon: "🌍", title: "Shumëgjuhësh",          desc: "Arabisht • Anglisht • Turqisht • Shqip • ..." },
+          { icon: "🕌", title: "Oraret e Namazit", desc: "Pesë kohët e namazit sipas vendndodhjes suaj" },
+          { icon: "📱", title: "Aplikacioni Mobil", desc: "Shkarkoni aplikacionin dhe dëgjoni kudo" },
         ]
       },
       ru: {
@@ -944,6 +1163,8 @@
           { icon: "📿", title: "Счётчик Тасбих",      desc: "Интерактивный счётчик с таймером и будильником" },
           { icon: "📜", title: "Хадис",               desc: "Пророческие предания и биографии сподвижников" },
           { icon: "🌍", title: "Многоязычный",        desc: "Арабский • Английский • Испанский • Русский • ..." },
+          { icon: "🕌", title: "Время Намаза", desc: "Расписание пяти намазов по вашему местоположению" },
+          { icon: "📱", title: "Мобильное Приложение", desc: "Скачайте приложение и слушайте в любом месте" },
         ]
       },
       zh: {
@@ -960,6 +1181,8 @@
           { icon: "📿", title: "念珠计数器",    desc: "带计时器和闹钟的互动计数器" },
           { icon: "📜", title: "圣训",          desc: "先知传统与圣门弟子传记" },
           { icon: "🌍", title: "多语言支持",    desc: "阿拉伯语 • 英语 • 西班牙语 • 法语 • ..." },
+          { icon: "🕌", title: "礼拜时间", desc: "根据您的位置显示每日五次礼拜时间" },
+          { icon: "📱", title: "手机应用", desc: "下载应用程序，随时随地收听" },
         ]
       },
       de: {
@@ -976,6 +1199,8 @@
           { icon: "📿", title: "Tasbih-Zähler",        desc: "Interaktiver Zähler mit Timer und Alarm" },
           { icon: "📜", title: "Hadith",                desc: "Prophetische Überlieferungen und Gefährten-Biografien" },
           { icon: "🌍", title: "Mehrsprachig",          desc: "Arabisch • Englisch • Spanisch • Deutsch • ..." },
+          { icon: "🕌", title: "Gebetszeiten", desc: "Fünf tägliche Gebetszeiten basierend auf Ihrem Standort" },
+          { icon: "📱", title: "Mobile App", desc: "App herunterladen und überall zuhören" },
         ]
       },
       pt: {
@@ -992,6 +1217,8 @@
           { icon: "📿", title: "Contador Tasbih",         desc: "Contador interativo com cronômetro e alarme" },
           { icon: "📜", title: "Hadith",                  desc: "Tradições proféticas e biografias dos companheiros" },
           { icon: "🌍", title: "Multilíngue",             desc: "Árabe • Inglês • Espanhol • Francês • ..." },
+          { icon: "🕌", title: "Horários de Oração", desc: "Cinco orações diárias de acordo com sua localização" },
+          { icon: "📱", title: "Aplicativo Móvel", desc: "Baixe o app e ouça a qualquer hora e lugar" },
         ]
       },
       es: {
@@ -1008,6 +1235,8 @@
           { icon: "📿", title: "Contador de Tasbih",      desc: "Contador interactivo con temporizador y alarma" },
           { icon: "📜", title: "Hadith",                  desc: "Tradiciones proféticas y biografías de compañeros" },
           { icon: "🌍", title: "Multilingüe",             desc: "Árabe • Inglés • Español • Francés • ..." },
+          { icon: "🕌", title: "Horarios de Oración", desc: "Las cinco oraciones diarias según su ubicación" },
+          { icon: "📱", title: "Aplicación Móvil", desc: "Descarga la app y escucha en cualquier lugar" },
         ]
       },
       tl: {
@@ -1024,6 +1253,8 @@
           { icon: "📿", title: "Tasbih Counter",       desc: "Interactive na counter na may timer at alarm" },
           { icon: "📜", title: "Hadith",               desc: "Mga tradisyon ng Propeta at talambuhay ng Sahaba" },
           { icon: "🌍", title: "Maraming Wika",        desc: "Arabik • Ingles • Espanyol • Filipino • ..." },
+          { icon: "🕌", title: "Oras ng Salah", desc: "Limang oras ng panalangin araw-araw batay sa inyong lokasyon" },
+          { icon: "📱", title: "Mobile App", desc: "I-download ang app at makinig kahit saan" },
         ]
       },
       vi: {
@@ -1040,6 +1271,8 @@
           { icon: "📿", title: "Đếm Tasbih",         desc: "Bộ đếm tương tác với hẹn giờ và báo thức" },
           { icon: "📜", title: "Hadith",              desc: "Truyền thống Thiên sứ và tiểu sử các Sahabah" },
           { icon: "🌍", title: "Đa Ngôn Ngữ",        desc: "Ả Rập • Anh • Tây Ban Nha • Việt Nam • ..." },
+          { icon: "🕌", title: "Giờ Cầu Nguyện", desc: "Năm thời gian cầu nguyện hàng ngày theo vị trí của bạn" },
+          { icon: "📱", title: "Ứng dụng Di động", desc: "Tải ứng dụng và nghe mọi lúc mọi nơi" },
         ]
       },
       th: {
@@ -1056,6 +1289,8 @@
           { icon: "📿", title: "นับลูกประคำตัสบีห์", desc: "เครื่องนับแบบโต้ตอบพร้อมตั้งเวลาและนาฬิกาปลุก" },
           { icon: "📜", title: "หะดีษ",             desc: "ประเพณีของศาสดาและชีวประวัติของสหาย" },
           { icon: "🌍", title: "หลายภาษา",          desc: "อาหรับ • อังกฤษ • สเปน • ไทย • ..." },
+          { icon: "🕌", title: "เวลาละหมาด", desc: "เวลาละหมาดห้าเวลาตามตำแหน่งของคุณ" },
+          { icon: "📱", title: "แอปมือถือ", desc: "ดาวน์โหลดแอปและฟังได้ทุกที่ทุกเวลา" },
         ]
       },
       it: {
@@ -1072,6 +1307,8 @@
           { icon: "📿", title: "Contatore Tasbih",        desc: "Contatore interattivo con timer e sveglia" },
           { icon: "📜", title: "Hadith",                  desc: "Tradizioni profetiche e biografie dei Compagni" },
           { icon: "🌍", title: "Multilingue",             desc: "Arabo • Inglese • Spagnolo • Italiano • ..." },
+          { icon: "🕌", title: "Orari della Preghiera", desc: "I cinque orari di preghiera giornalieri in base alla tua posizione" },
+          { icon: "📱", title: "App Mobile", desc: "Scarica l'app e ascolta ovunque tu voglia" },
         ]
       },
       nl: {
@@ -1088,6 +1325,8 @@
           { icon: "📿", title: "Tasbih Teller",        desc: "Interactieve teller met timer en alarm" },
           { icon: "📜", title: "Hadith",               desc: "Profetische overleveringen en biografieën van Metgezellen" },
           { icon: "🌍", title: "Meertalig",            desc: "Arabisch • Engels • Spaans • Nederlands • ..." },
+          { icon: "🕌", title: "Gebedstijden", desc: "Vijf dagelijkse gebedstijden op basis van uw locatie" },
+          { icon: "📱", title: "Mobiele App", desc: "Download de app en luister overal" },
         ]
       },
       pl: {
@@ -1104,6 +1343,8 @@
           { icon: "📿", title: "Licznik Tasbih",      desc: "Interaktywny licznik z timerem i alarmem" },
           { icon: "📜", title: "Hadith",              desc: "Tradycje prorockie i biografie towarzyszy" },
           { icon: "🌍", title: "Wielojęzyczny",       desc: "Arabski • Angielski • Hiszpański • Polski • ..." },
+          { icon: "🕌", title: "Czasy Modlitwy", desc: "Pięć codziennych czasów modlitwy według Twojej lokalizacji" },
+          { icon: "📱", title: "Aplikacja Mobilna", desc: "Pobierz aplikację i słuchaj wszędzie" },
         ]
       },
       uk: {
@@ -1120,6 +1361,8 @@
           { icon: "📿", title: "Лічильник Тасбіх",     desc: "Інтерактивний лічильник з таймером і будильником" },
           { icon: "📜", title: "Хадис",                desc: "Пророчі перекази та біографії сподвижників" },
           { icon: "🌍", title: "Багатомовний",         desc: "Арабська • Англійська • Іспанська • Українська • ..." },
+          { icon: "🕌", title: "Часи Молитви", desc: "П'ять щоденних часів молитви за вашим місцеположенням" },
+          { icon: "📱", title: "Мобільний Додаток", desc: "Завантажте додаток і слухайте будь-де" },
         ]
       },
       bs: {
@@ -1136,6 +1379,8 @@
           { icon: "📿", title: "Tespih Brojač",         desc: "Interaktivni brojač s timerom i alarmom" },
           { icon: "📜", title: "Hadis",                 desc: "Vjerodostojne predaje i biografije ashaba" },
           { icon: "🌍", title: "Višejezičan",           desc: "Arapski • Engleski • Španski • Bosanski • ..." },
+          { icon: "🕌", title: "Vremena Namaza", desc: "Pet dnevnih namaza prema vašoj lokaciji" },
+          { icon: "📱", title: "Mobilna Aplikacija", desc: "Preuzmite aplikaciju i slušajte bilo gdje" },
         ]
       },
       hr: {
@@ -1152,6 +1397,8 @@
           { icon: "📿", title: "Tesbih Brojač",         desc: "Interaktivni brojač s timerom i alarmom" },
           { icon: "📜", title: "Hadis",                 desc: "Vjerodostojne predaje i biografije ashaba" },
           { icon: "🌍", title: "Višejezičan",           desc: "Arapski • Engleski • Španjolski • Hrvatski • ..." },
+          { icon: "🕌", title: "Vremena Namaza", desc: "Pet dnevnih namaza prema vašoj lokaciji" },
+          { icon: "📱", title: "Mobilna Aplikacija", desc: "Preuzmite aplikaciju i slušajte bilo gdje" },
         ]
       },
       bg: {
@@ -1168,6 +1415,8 @@
           { icon: "📿", title: "Броячка Тасбих",        desc: "Интерактивна броячка с таймер и аларма" },
           { icon: "📜", title: "Хадис",                 desc: "Пророчески предания и биографии на сподвижниците" },
           { icon: "🌍", title: "Многоезичен",           desc: "Арабски • Английски • Испански • Български • ..." },
+          { icon: "🕌", title: "Времена за Намаз", desc: "Петте ежедневни намаза според вашето местоположение" },
+          { icon: "📱", title: "Мобилно Приложение", desc: "Изтеглете приложението и слушайте навсякъде" },
         ]
       },
       el: {
@@ -1184,6 +1433,8 @@
           { icon: "📿", title: "Μετρητής Ταξπίχ",       desc: "Διαδραστικός μετρητής με χρονόμετρο και συναγερμό" },
           { icon: "📜", title: "Χαντίθ",                desc: "Προφητικές παραδόσεις και βιογραφίες των Σαχάμπα" },
           { icon: "🌍", title: "Πολύγλωσσο",            desc: "Αραβικά • Αγγλικά • Ισπανικά • Ελληνικά • ..." },
+          { icon: "🕌", title: "Ώρες Προσευχής", desc: "Πέντε ημερήσιες ώρες προσευχής με βάση την τοποθεσία σας" },
+          { icon: "📱", title: "Εφαρμογή Κινητού", desc: "Κατεβάστε την εφαρμογή και ακούστε παντού" },
         ]
       },
       sv: {
@@ -1200,6 +1451,8 @@
           { icon: "📿", title: "Tasbih-räknare",       desc: "Interaktiv räknare med timer och alarm" },
           { icon: "📜", title: "Hadith",               desc: "Profetiska traditioner och följeslagarnas biografier" },
           { icon: "🌍", title: "Flerspråkig",          desc: "Arabiska • Engelska • Spanska • Svenska • ..." },
+          { icon: "🕌", title: "Bönetider", desc: "Fem dagliga bönetider baserat på din plats" },
+          { icon: "📱", title: "Mobilapp", desc: "Ladda ner appen och lyssna var som helst" },
         ]
       },
       da: {
@@ -1216,6 +1469,8 @@
           { icon: "📿", title: "Tasbih-tæller",        desc: "Interaktiv tæller med timer og alarm" },
           { icon: "📜", title: "Hadith",               desc: "Profetiske overleveringer og ledsagernes biografier" },
           { icon: "🌍", title: "Flersproget",          desc: "Arabisk • Engelsk • Spansk • Dansk • ..." },
+          { icon: "🕌", title: "Bønnetider", desc: "Fem daglige bønnetider baseret på din placering" },
+          { icon: "📱", title: "Mobilapp", desc: "Download appen og lyt overalt" },
         ]
       },
       fi: {
@@ -1232,6 +1487,8 @@
           { icon: "📿", title: "Tasbih-laskuri",        desc: "Interaktiivinen laskuri ajastimella ja hälytyksellä" },
           { icon: "📜", title: "Hadiith",               desc: "Profeetallinen perimätieto ja sahabien elämäkerrat" },
           { icon: "🌍", title: "Monikielinen",          desc: "Arabia • Englanti • Espanja • Suomi • ..." },
+          { icon: "🕌", title: "Rukousajat", desc: "Viisi päivittäistä rukousaikaa sijaintisi mukaan" },
+          { icon: "📱", title: "Mobiilisovellus", desc: "Lataa sovellus ja kuuntele missä tahansa" },
         ]
       },
       cs: {
@@ -1248,6 +1505,8 @@
           { icon: "📿", title: "Počítadlo Tasbih",     desc: "Interaktivní počítadlo s časovačem a budíkem" },
           { icon: "📜", title: "Hadís",                desc: "Prorocké tradice a biografie společníků" },
           { icon: "🌍", title: "Vícejazyčný",          desc: "Arabština • Angličtina • Španělština • Čeština • ..." },
+          { icon: "🕌", title: "Časy Modlitby", desc: "Pět denních časů modlitby podle vaší polohy" },
+          { icon: "📱", title: "Mobilní Aplikace", desc: "Stáhněte aplikaci a poslouchejte kdekoli" },
         ]
       },
       tk: {
@@ -1264,6 +1523,8 @@
           { icon: "📿", title: "Tesbih Sanawaç",        desc: "Taýmer we duýduryş bilen interaktiw sanawaç" },
           { icon: "📜", title: "Hadys",                 desc: "Pygamber däpleri we sahabalaryň terjimehaly" },
           { icon: "🌍", title: "Köp Dilli",             desc: "Arap • Iňlis • Ispan • Türkmen • ..." },
+          { icon: "🕌", title: "Namaz Wagty", desc: "Ýeriňize görä bäş wagt namazynyň wagty" },
+          { icon: "📱", title: "Mobil Goşundysy", desc: "Programmany ýükläň we islendik ýerde diňläň" },
         ]
       },
       be: {
@@ -1280,6 +1541,8 @@
           { icon: "📿", title: "Лічыльнік Тасбіх",      desc: "Інтэрактыўны лічыльнік з таймерам і будзільнікам" },
           { icon: "📜", title: "Хадыс",                 desc: "Прарочыя паданні і біяграфіі сподзвіжнікаў" },
           { icon: "🌍", title: "Шматмоўны",             desc: "Арабская • Англійская • Іспанская • Беларуская • ..." },
+          { icon: "🕌", title: "Час Малітвы", desc: "Пяць штодзённых часоў малітвы паводле вашага месцазнаходжання" },
+          { icon: "📱", title: "Мабільны Дадатак", desc: "Спампуйце праграму і слухайце дзе заўгодна" },
         ]
       },
       lv: {
@@ -1296,6 +1559,8 @@
           { icon: "📿", title: "Tasbih Skaitītājs",     desc: "Interaktīvs skaitītājs ar taimeri un modinātāju" },
           { icon: "📜", title: "Hadīts",                desc: "Pravietiskās tradīcijas un Sahabu biogrāfijas" },
           { icon: "🌍", title: "Daudzvalodu",           desc: "Arābu • Angļu • Spāņu • Latviešu • ..." },
+          { icon: "🕌", title: "Lūgšanu Laiki", desc: "Pieci ikdienas lūgšanu laiki pēc jūsu atrašanās vietas" },
+          { icon: "📱", title: "Mobilā Lietotne", desc: "Lejupielādējiet lietotni un klausieties jebkur" },
         ]
       },
       lb: {
@@ -1312,6 +1577,8 @@
           { icon: "📿", title: "Tasbih-Zieler",         desc: "Interaktive Zieler mat Timer an Alarm" },
           { icon: "📜", title: "Hadith",                desc: "Prophetescht Iwwerleiwerungen a Begleeder-Biographien" },
           { icon: "🌍", title: "Méisproocheg",          desc: "Arabesch • Englesch • Spuenesch • Lëtzebuergesch • ..." },
+          { icon: "🕌", title: "Gebiedszäiten", desc: "Fënnef deeglech Gebiedszäiten no Ärem Standuert" },
+          { icon: "📱", title: "Handy App", desc: "App eroflueden an iwwerall nolauschteren" },
         ]
       },
       ga: {
@@ -1328,6 +1595,8 @@
           { icon: "📿", title: "Áireamhán Tasbih",      desc: "Áireamhán idirghníomhach le hama agus aláram" },
           { icon: "📜", title: "Hadith",                desc: "Traidisiúin fháidhiúla agus beathaisnéisí na gCompánach" },
           { icon: "🌍", title: "Ilteangach",            desc: "Araibis • Béarla • Spáinnis • Gaeilge • ..." },
+          { icon: "🕌", title: "Amanna Urnaí", desc: "Cúig amanna urnaí laethúla bunaithe ar do shuíomh" },
+          { icon: "📱", title: "Aip Mhóibíleach", desc: "Íoslódáil an aip agus éist cibé áit" },
         ]
       },
       mi: {
@@ -1344,6 +1613,8 @@
           { icon: "📿", title: "Kaute Tasbih",          desc: "Kaute taunekeneke me te taima me te waetohu" },
           { icon: "📜", title: "Hadith",                desc: "Ngā tikanga o te Poropiti me ngā hītori o ngā Hoa" },
           { icon: "🌍", title: "Reo Maha",              desc: "Arapi • Ingarihi • Paniora • Māori • ..." },
+          { icon: "🕌", title: "Ngā Wā Inoi", desc: "E rima ngā wā inoi ā-rā i runga i tō wāhi" },
+          { icon: "📱", title: "Tono Waea", desc: "Tikiake te tono ka whakarongo ki hea ake" },
         ]
       },
       ko: {
@@ -1360,6 +1631,8 @@
           { icon: "📿", title: "타스비흐 카운터", desc: "타이머와 알람이 있는 인터랙티브 카운터" },
           { icon: "📜", title: "하디스",           desc: "예언자 전통과 사하바 전기" },
           { icon: "🌍", title: "다국어 지원",      desc: "아랍어 • 영어 • 스페인어 • 한국어 • ..." },
+          { icon: "🕌", title: "기도 시간", desc: "위치에 따른 하루 다섯 번의 기도 시간" },
+          { icon: "📱", title: "모바일 앱", desc: "앱을 다운받아 어디서든 들어보세요" },
         ]
       },
       ja: {
@@ -1376,6 +1649,8 @@
           { icon: "📿", title: "タスビーフカウンター", desc: "タイマーとアラーム付きインタラクティブカウンター" },
           { icon: "📜", title: "ハディース",        desc: "預言者の伝承とサハーバの伝記" },
           { icon: "🌍", title: "多言語対応",        desc: "アラビア語 • 英語 • スペイン語 • 日本語 • ..." },
+          { icon: "🕌", title: "礼拝時間", desc: "あなたの場所に基づく1日5回の礼拝時間" },
+          { icon: "📱", title: "モバイルアプリ", desc: "アプリをダウンロードしていつでもどこでも聴けます" },
         ]
       },
       he: {
@@ -1392,6 +1667,8 @@
           { icon: "📿", title: "מונה תסביח",           desc: "מונה אינטראקטיבי עם טיימר והתראה" },
           { icon: "📜", title: "חדית'",                desc: "מסורות נבואיות וביוגרפיות הסאחאבה" },
           { icon: "🌍", title: "רב-לשוני",             desc: "ערבית • אנגלית • ספרדית • עברית • ..." },
+          { icon: "🕌", title: "זמני תפילה", desc: "חמש תפילות יומיות לפי מיקומך" },
+          { icon: "📱", title: "אפליקציה לנייד", desc: "הורד את האפליקציה והאזן בכל מקום" },
         ]
       }
 
@@ -1407,53 +1684,39 @@
     }
 
     // ─────────────────────────────────────────────
-    //  APPLY LANGUAGE
+    //  APPLY LANGUAGE  (see full version below)
     // ─────────────────────────────────────────────
-    function applyLang(code) {
-      const t = translations[code];
-      if (!t) return;
-
-      // Direction & font
-      document.documentElement.lang = code;
-      document.documentElement.dir = t.dir;
-      if (t.dir === 'ltr') {
-        document.body.classList.add('ltr');
-      } else {
-        document.body.classList.remove('ltr');
-      }
-
-      // Text content
-      document.getElementById('mainTitle').childNodes[0].textContent = t.title + '\n';
-      document.getElementById('subTitle').textContent = t.subtitle;
-      document.getElementById('ayahRef').textContent = t.ayahRef;
-      document.getElementById('ctaText').textContent = t.cta;
-      document.getElementById('ctaSub').textContent = t.ctaSub;
-      document.title = t.title + ' | Radio Ma';
-
-      // Features grid
-      const grid = document.getElementById('featuresGrid');
-      grid.innerHTML = t.features.map(f => `
-        <div class="feature">
-          <span class="feature-icon">${f.icon}</span>
-          <p class="feature-title">${f.title}</p>
-          <p class="feature-desc">${f.desc}</p>
-        </div>
-      `).join('');
-
-      // Active button
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.dataset.lang === code);
-      });
-
-      // Save preference
-      localStorage.setItem('preferredLang', code);
-    }
+    function applyLang(code) {}
 
     // ─────────────────────────────────────────────
     //  BUILD LANG SWITCHER  (top-10 + regions)
     // ─────────────────────────────────────────────
     function buildSwitcher() {
       const switcher = document.getElementById('langSwitcher');
+
+      // ── Search box ──
+      const search = document.createElement('input');
+      search.type = 'text';
+      search.className = 'lang-search';
+      search.id = 'langSearch';
+      search.placeholder = '🔍 ابحث عن لغة...';
+      switcher.appendChild(search);
+
+      search.addEventListener('input', () => {
+        const q = search.value.trim().toLowerCase();
+        switcher.querySelectorAll('.lang-btn').forEach(btn => {
+          const match = btn.textContent.toLowerCase().includes(q);
+          btn.closest('.lang-row').style.display = '';
+          btn.style.display = match || !q ? '' : 'none';
+        });
+        switcher.querySelectorAll('.lang-row').forEach(row => {
+          const anyVisible = [...row.querySelectorAll('.lang-btn')].some(b => b.style.display !== 'none');
+          row.style.display = anyVisible ? '' : 'none';
+        });
+        switcher.querySelectorAll('.lang-divider').forEach(d => {
+          d.style.display = q ? 'none' : '';
+        });
+      });
 
       // ── أول 10 الأكثر انتشاراً عالمياً (إجمالي المتحدثين) ──
       const top10 = ['en','zh','hi','es','fr','ar','bn','pt','ru','ur'];
@@ -1528,8 +1791,119 @@
     }
 
     // ─────────────────────────────────────────────
-    //  INIT
+    //  STATS COUNTER ANIMATION
     // ─────────────────────────────────────────────
+    const statsTargets = { langs: 56, stations: 120, reciters: 30 };
+    const statsLabels = {
+      ar:  { langs:'لغة',       stations:'إذاعة',      live:'بث مباشر',     reciters:'قارئ' },
+      en:  { langs:'Languages', stations:'Stations',    live:'Live 24/7',     reciters:'Reciters' },
+      fr:  { langs:'Langues',   stations:'Stations',    live:'En direct',     reciters:'Récitateurs' },
+      es:  { langs:'Idiomas',   stations:'Emisoras',    live:'En directo',    reciters:'Recitadores' },
+      tr:  { langs:'Dil',       stations:'İstasyon',    live:'Canlı 24/7',    reciters:'Kari' },
+      id:  { langs:'Bahasa',    stations:'Stasiun',     live:'Siaran Langsung', reciters:'Qari' },
+      ur:  { langs:'زبانیں',    stations:'اسٹیشن',     live:'لائیو',         reciters:'قاری' },
+      de:  { langs:'Sprachen',  stations:'Sender',      live:'Live 24/7',     reciters:'Rezitatoren' },
+      ru:  { langs:'Языков',    stations:'Станций',     live:'Прямой эфир',   reciters:'Чтецов' },
+    };
+    function updateStatsLabels(code) {
+      const lbl = statsLabels[code] || statsLabels.en;
+      const lblLangs = document.getElementById('lbl-langs');
+      const lblStations = document.getElementById('lbl-stations');
+      const lblLive = document.getElementById('lbl-live');
+      const lblReciters = document.getElementById('lbl-reciters');
+      if (lblLangs) lblLangs.textContent = lbl.langs;
+      if (lblStations) lblStations.textContent = lbl.stations;
+      if (lblLive) lblLive.textContent = lbl.live;
+      if (lblReciters) lblReciters.textContent = lbl.reciters;
+    }
+    function animateCounter(id, target, duration = 1800) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const start = performance.now();
+      function step(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(ease * target) + '+';
+        if (p < 1) requestAnimationFrame(step);
+        else el.textContent = target + '+';
+      }
+      requestAnimationFrame(step);
+    }
+    const statsObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          animateCounter('cnt-langs',    statsTargets.langs,    1400);
+          animateCounter('cnt-stations', statsTargets.stations, 1800);
+          animateCounter('cnt-reciters', statsTargets.reciters, 1200);
+          statsObs.disconnect();
+        }
+      });
+    }, { threshold: 0.4 });
+    const statsBar = document.getElementById('statsBar');
+    if (statsBar) statsObs.observe(statsBar);
+
+    // ─────────────────────────────────────────────
+    //  DHIKR TICKER
+    // ─────────────────────────────────────────────
+    const dhikrList = [
+      'سُبْحَانَ اللَّهِ', 'الْحَمْدُ لِلَّهِ', 'اللَّهُ أَكْبَرُ',
+      'لَا إِلَهَ إِلَّا اللَّهُ', 'أَسْتَغْفِرُ اللَّهَ',
+      'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', 'لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ',
+      'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ ﷺ', 'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ',
+      'سُبْحَانَ اللَّهِ الْعَظِيمِ',
+    ];
+    function buildTicker() {
+      const track = document.getElementById('dhikrTrack');
+      if (!track) return;
+      const doubled = [...dhikrList, ...dhikrList];
+      track.innerHTML = doubled.map(d =>
+        `<span class="dhikr-item"><span class="dhikr-dot"></span>${d}</span>`
+      ).join('');
+    }
+    buildTicker();
+
+    // ─────────────────────────────────────────────
+    //  FEATURE CARD LINKS  (map to site sections)
+    // ─────────────────────────────────────────────
+    const BASE = 'https://magziko.github.io/Radio/';
+    const featureLinks = {
+      '🎙️': BASE, '🌿': BASE, '📖': BASE,
+      '📿': BASE, '📜': BASE, '🌍': BASE,
+      '🕌': BASE, '📱': 'https://median.co/share/bnakxxn#androidphone',
+    };
+
+    // ─────────────────────────────────────────────
+    //  APPLY LANGUAGE  (full, with linked feature cards)
+    // ─────────────────────────────────────────────
+    applyLang = function(code) {
+      const t = translations[code];
+      if (!t) return;
+      document.documentElement.lang = code;
+      document.documentElement.dir = t.dir;
+      if (t.dir === 'ltr') document.body.classList.add('ltr');
+      else document.body.classList.remove('ltr');
+      document.getElementById('mainTitle').childNodes[0].textContent = t.title + '\n';
+      document.getElementById('subTitle').textContent = t.subtitle;
+      document.getElementById('ayahRef').textContent = t.ayahRef;
+      document.getElementById('ctaText').textContent = t.cta;
+      document.getElementById('ctaSub').textContent = t.ctaSub;
+      document.title = t.title + ' | Radio Ma';
+      const grid = document.getElementById('featuresGrid');
+      grid.innerHTML = t.features.map(f => {
+        const url = featureLinks[f.icon] || BASE;
+        return `<a class="feature" href="${url}" target="_blank" rel="noopener">
+          <span class="feature-icon">${f.icon}</span>
+          <p class="feature-title">${f.title}</p>
+          <p class="feature-desc">${f.desc}</p>
+          <span class="feature-arrow">↗</span>
+        </a>`;
+      }).join('');
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === code);
+      });
+      localStorage.setItem('preferredLang', code);
+      updateStatsLabels(code);
+    };
     buildSwitcher();
     const saved = localStorage.getItem('preferredLang');
     applyLang(saved && translations[saved] ? saved : detectLang());
@@ -1539,7 +1913,16 @@
     document.getElementById('langToggle').addEventListener('click', (e) => {
       e.stopPropagation();
       wrapper.classList.toggle('open');
+      // focus search when opening
+      if (wrapper.classList.contains('open')) {
+        setTimeout(() => {
+          const s = document.getElementById('langSearch');
+          if (s) s.focus();
+        }, 50);
+      }
     });
+    // clicks INSIDE the switcher (search, buttons, dividers) don't close it
+    document.getElementById('langSwitcher').addEventListener('click', (e) => e.stopPropagation());
     document.addEventListener('click', () => wrapper.classList.remove('open'));
 
     // ─────────────────────────────────────────────
